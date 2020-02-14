@@ -1,0 +1,10 @@
+beam_break_nodes (Beacon beam breaks nodes) bool false
+beam_climbable (Climbable beacon beam) bool true
+beam_length (Maximum beam length) int 200
+effect_range_0 (Level 0 beacon effect range) int 10
+effect_range_1 (Level 1 beacon effect range) int 20
+effect_range_2 (Level 2 beacon effect range) int 30
+effect_range_3 (Level 3 beacon effect range) int 40
+effect_range_4 (Level 4 beacon effect range) int 50
+refresh_time (Beacon effect refresh time) int 3
+upgrade_item (Beacon upgrade item) string default:diamondblock
