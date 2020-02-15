@@ -159,7 +159,7 @@ minetest.register_lbm({
 			meta:set_string("active", "true")
 			minetest.get_node_timer(pos):start(beacon.config.effect_refresh_time)
 		elseif node.name == "beacon:red" then
-			meta:set_string("effect", "healing2") -- TODO: add healing effect
+			meta:set_string("effect", "healing2")
 			meta:set_int("range", 30)
 			meta:set_string("active", "true")
 			minetest.get_node_timer(pos):start(beacon.config.effect_refresh_time)
