@@ -132,7 +132,7 @@ function beacon.update(pos, color)
 		for _,player in ipairs(minetest.get_connected_players()) do
 			local name = player:get_player_name()
 			local distance = get_max_distance(player:get_pos(), pos)
-			if distance <= range then
+			if distance <= range and beacon.effects[effect] then
 				if not beacon.player_effects[name] then
 					beacon.player_effects[name] = {}
 				end

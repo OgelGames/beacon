@@ -149,8 +149,28 @@ minetest.register_lbm({
 	nodenames = {"group:beacon"},
 	run_at_every_load = false,
 	action = function(pos, node)
-		if not minetest.get_meta(pos):get_inventory():get_lists().beacon_upgrades then
-			beacon.set_default_meta(pos)
+		local meta = minetest.get_meta(pos)
+		beacon.set_default_meta(pos)
+		meta:set_string("beam_dir", "+Y")
+		-- old beacon effects
+		if node.name == "beacon:green" then
+			meta:set_string("effect", "fly")
+			meta:set_int("range", 30)
+			meta:set_string("active", "true")
+			minetest.get_node_timer(pos):start(beacon.config.effect_refresh_time)
+		elseif node.name == "beacon:red" then
+			meta:set_string("effect", "healing2") -- TODO: add healing effect
+			meta:set_int("range", 30)
+			meta:set_string("active", "true")
+			minetest.get_node_timer(pos):start(beacon.config.effect_refresh_time)
 		end
 	end
 })
+
+-- purple is named violet now
+minetest.register_alias("beacon:purplebeam", "beacon:violetbeam")
+minetest.register_alias("beacon:purplebase", "beacon:violetbase")
+minetest.register_alias("beacon:purple", "beacon:violet")
+
+-- no empty/unactivated beacon
+minetest.register_alias("beacon:empty", "beacon:white")
