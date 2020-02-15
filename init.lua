@@ -17,13 +17,17 @@ beacon.config = {
 	upgrade_item = minetest.settings:get("beacon_upgrade_item") or "default:diamondblock",
 }
 
-local modpath = minetest.get_modpath(minetest.get_current_modname())
+beacon.has_player_monoids = minetest.global_exists("player_monoids")
 
-dofile(modpath.."/api.lua")
-dofile(modpath.."/functions.lua")
-dofile(modpath.."/formspec.lua")
-dofile(modpath.."/effects.lua")
-dofile(modpath.."/register.lua")
+beacon.modpath = minetest.get_modpath(minetest.get_current_modname())
+
+dofile(beacon.modpath.."/api.lua")
+dofile(beacon.modpath.."/functions.lua")
+dofile(beacon.modpath.."/formspec.lua")
+dofile(beacon.modpath.."/effects.lua")
+dofile(beacon.modpath.."/register.lua")
+
+dofile(beacon.modpath.."/effects/init.lua")
 
 minetest.after(0, function()
 	if minetest.registered_items[beacon.config.upgrade_item] == nil then
