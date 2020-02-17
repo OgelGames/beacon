@@ -79,7 +79,9 @@ minetest.register_on_leaveplayer(function(player)
 	local name = player:get_player_name()
 	for id,_ in pairs(beacon.player_effects[name].active) do
 		-- remove all effects before leaving
-		beacon.effects[id].on_remove(player, name)
+		if beacon.effects[id].on_remove then
+			beacon.effects[id].on_remove(player, name)
+		end
 	end
 	beacon.player_effects[name] = nil
 end)
