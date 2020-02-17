@@ -3,10 +3,10 @@
 --------------------------------------------------
 
 local water_nodes = {
-	"default:water_source",
-	"default:water_flowing",
-	"default:river_water_source",
-	"default:river_water_flowing",
+	["default:water_source"] = true,
+	["default:water_flowing"] = true,
+	["default:river_water_source"] = true,
+	["default:river_water_flowing"] = true,
 }
 
 beacon.register_effect("breathing", {
@@ -18,11 +18,8 @@ beacon.register_effect("breathing", {
 			local pos = vector.round(player:get_pos())
 			pos.y = pos.y + 1
 			local node = minetest.get_node(pos)
-			for _,name in ipairs(water_nodes) do
-				if node.name == name then
-					player:set_breath(10)
-					return
-				end
+			if water_nodes[node.name] then
+				player:set_breath(10)
 			end
 		end
 	end,

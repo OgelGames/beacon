@@ -1,16 +1,18 @@
 
 local function get_useable_effects(name)
 	local useable_effects = beacon.player_effects[name].avalible
-	-- check the avalible effects
+	-- check all the effects granted by nearby beacons
 	for effect,timer in pairs(beacon.player_effects[name].avalible) do
 		if timer < 0 then
 			-- remove the expired effect
 			beacon.player_effects[name].avalible[effect] = nil
 			useable_effects[effect] = nil
 		else
-			-- remove the effects overridden by the effect
-			for _,override in ipairs(beacon.effects[effect].overrides) do
-				useable_effects[override] = nil
+			if type(beacon.effects[effect].overrides) == "table" then
+				-- remove the effects overridden by the effect
+				for _,override in ipairs(beacon.effects[effect].overrides) do
+					useable_effects[override] = nil
+				end
 			end
 			-- update the timer
 			beacon.player_effects[name].avalible[effect] = timer - 1
@@ -19,12 +21,13 @@ local function get_useable_effects(name)
 	return useable_effects
 end
 
-local function get_all_effect_ids(tabs)
+local function get_all_effect_ids(effects1, effects2)
 	local effect_ids = {}
-	for _,tab in ipairs(tabs) do
-		for id,_ in pairs(tab) do
-			effect_ids[id] = true
-		end
+	for id,_ in pairs(effects1) do
+		effect_ids[id] = true
+	end
+	for id,_ in pairs(effects2) do
+		effect_ids[id] = true
 	end
 	return effect_ids
 end
@@ -43,18 +46,24 @@ minetest.register_globalstep(function(dtime)
 			local useable = get_useable_effects(name)
 			local active = beacon.player_effects[name].active
 			-- check the player's effects
-			for id,_ in pairs(get_all_effect_ids({active, useable})) do
+			for id,_ in pairs(get_all_effect_ids(active, useable)) do
 				-- remove effect
 				if active[id] and not useable[id] then
-					beacon.effects[id].on_remove(player, name)
 					active[id] = nil
+					if beacon.effects[id].on_remove then
+						beacon.effects[id].on_remove(player, name)
+					end
 				-- add effect
 				elseif useable[id] and not active[id] then
-					beacon.effects[id].on_apply(player, name)
 					active[id] = true
+					if beacon.effects[id].on_apply then
+						beacon.effects[id].on_apply(player, name)
+					end
 				-- update effect
 				else
-					beacon.effects[id].on_step(player, name)
+					if beacon.effects[id].on_step then
+						beacon.effects[id].on_step(player, name)
+					end
 				end
 			end
 			beacon.player_effects[name].active = active
@@ -69,6 +78,7 @@ end)
 minetest.register_on_leaveplayer(function(player)
 	local name = player:get_player_name()
 	for id,_ in pairs(beacon.player_effects[name].active) do
+		-- remove all effects before leaving
 		beacon.effects[id].on_remove(player, name)
 	end
 	beacon.player_effects[name] = nil

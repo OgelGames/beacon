@@ -1,11 +1,11 @@
 --[[
-beacon.register_effect("name", {
+beacon.register_effect("id_name", {
 	desc_name = "Name",
 	min_level = 0,
 	overrides = {},
-	on_apply = function(player) end,
-	on_step = function(player) end,
-	on_remove = function(player) end,
+	on_apply = function(player, name) end,
+	on_step = function(player, name) end,
+	on_remove = function(player, name) end,
 })
 ]]
 
@@ -20,12 +20,12 @@ function beacon.register_effect(name, def)
 		return -- no definitions
 	end
 	beacon.effects[name] = {
-		desc_name = def.desc_name or "",
+		desc_name = def.desc_name or "Unnamed Effect",
 		min_level = def.min_level or 0,
-		overrides = def.overrides or {},
-		on_apply = def.on_apply or function(player) end,
-		on_step = def.on_step or function(player) end,
-		on_remove = def.on_remove or function(player) end,
+		overrides = def.overrides,
+		on_apply = def.on_apply,
+		on_step = def.on_step,
+		on_remove = def.on_remove,
 	}
 end
 
@@ -43,7 +43,8 @@ function beacon.override_effect(name, redef)
 	for k, v in pairs(redef) do
 		rawset(def, k, v)
 	end
-	beacon.effects[name] = def
+	beacon.effects[name] = nil
+	beacon.register_effect(name, def)
 end
 
 function beacon.unregister_effect(name)

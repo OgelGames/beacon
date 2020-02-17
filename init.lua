@@ -1,3 +1,5 @@
+local load_start = os.clock()
+
 beacon = {}
 
 beacon.effects = {}
@@ -30,9 +32,9 @@ dofile(beacon.modpath.."/register.lua")
 dofile(beacon.modpath.."/effects/init.lua")
 
 minetest.after(0, function()
-	if minetest.registered_items[beacon.config.upgrade_item] == nil then
+	if not minetest.registered_items[beacon.config.upgrade_item] then
 		beacon.config.upgrade_item = "default:diamondblock"
 	end
 end)
 
-print("[OK] Beacons")
+print(("[Beacon] Loaded in %f seconds"):format(os.clock() - load_start))

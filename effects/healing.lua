@@ -2,31 +2,30 @@
 -- Healing - +1 HP every 5, 10, or 15 seconds
 --------------------------------------------------
 
-local fractional_hp_count = {}
+local timer = {}
 
 local function on_step(player, name, seconds)
-	if not fractional_hp_count[name] then
-		fractional_hp_count[name] = 0
+	if not timer[name] then
+		timer[name] = 0
 	end
-	if fractional_hp_count[name] >= 1 then
-		fractional_hp_count[name] = 0
+	if timer[name] >= seconds then
+		timer[name] = 0
 		local hp = player:get_hp() + 1
 		local hp_max = player:get_properties().hp_max
 		if hp <= hp_max then player:set_hp(hp) end
 	else
-		fractional_hp_count[name] = fractional_hp_count[name] + (1 / seconds)
+		timer[name] = timer[name] + 1
 	end
 end
 
 beacon.register_effect("healing1", {
 	desc_name = "Healing LV1",
 	min_level = 2,
-	overrides = {},
 	on_step = function(player, name)
 		on_step(player, name, 15)
 	end,
 	on_remove = function(player, name)
-		fractional_hp_count[name] = nil
+		timer[name] = nil
 	end,
 })
 
@@ -38,7 +37,7 @@ beacon.register_effect("healing2", {
 		on_step(player, name, 10)
 	end,
 	on_remove = function(player, name)
-		fractional_hp_count[name] = nil
+		timer[name] = nil
 	end,
 })
 
@@ -50,6 +49,6 @@ beacon.register_effect("healing3", {
 		on_step(player, name, 5)
 	end,
 	on_remove = function(player, name)
-		fractional_hp_count[name] = nil
+		timer[name] = nil
 	end,
 })

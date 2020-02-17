@@ -25,7 +25,6 @@ end
 beacon.register_effect("jump1", {
 	desc_name = "Jump Boost LV1",
 	min_level = 1,
-	overrides = {},
 	on_apply = function(player)
 		on_apply(player, 1.25, "beacon_jump1")
 	end,

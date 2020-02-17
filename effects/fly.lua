@@ -4,7 +4,6 @@
 
 beacon.register_effect("fly", {
 	desc_name = "Flying",
-	min_level = 1,
 	on_apply = function(player, name)
 		local privs = minetest.get_player_privs(name)
 		if privs.privs then return end -- don't effect admins

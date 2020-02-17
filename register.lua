@@ -1,14 +1,14 @@
 local colors = {
-	white	= { desc = "White", 	color = "#ffffffff" },
-    black	= { desc = "Black", 	color = "#0f0f0fff" },
-    blue	= { desc = "Blue", 		color = "#0000ffff" },
-    cyan	= { desc = "Cyan", 		color = "#00ffffff" },
-    green	= { desc = "Green", 	color = "#00ff00ff" },
-    magenta	= { desc = "Magenta", 	color = "#ff00ffff" },
-    orange	= { desc = "Orange", 	color = "#ff8000ff" },
-    red		= { desc = "Red", 		color = "#ff0000ff" },
-    violet	= { desc = "Violet", 	color = "#8f00ffff" },
-    yellow	= { desc = "Yellow", 	color = "#ffff00ff" },
+	["white"]	= { desc = "White", 	color = "#ffffffff" },
+	["black"]	= { desc = "Black", 	color = "#0f0f0fff" },
+	["blue"]	= { desc = "Blue", 		color = "#0000ffff" },
+	["cyan"]	= { desc = "Cyan", 		color = "#00ffffff" },
+	["green"]	= { desc = "Green", 	color = "#00ff00ff" },
+	["magenta"]	= { desc = "Magenta", 	color = "#ff00ffff" },
+	["orange"]	= { desc = "Orange", 	color = "#ff8000ff" },
+	["red"]		= { desc = "Red", 		color = "#ff0000ff" },
+	["violet"]	= { desc = "Violet", 	color = "#8f00ffff" },
+	["yellow"]	= { desc = "Yellow", 	color = "#ffff00ff" },
 }
 
 local facedir_under = {
