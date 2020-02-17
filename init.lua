@@ -6,6 +6,8 @@ beacon.effects = {}
 
 beacon.player_effects = {}
 
+beacon.sorted_effect_ids = {}
+
 beacon.config = {
 	beam_break_nodes = minetest.settings:get_bool("beacon_beam_break_nodes") or false,
 	beam_climbable = minetest.settings:get_bool("beacon_beam_climbable") or true,
@@ -32,9 +34,15 @@ dofile(beacon.modpath.."/register.lua")
 dofile(beacon.modpath.."/effects/init.lua")
 
 minetest.after(0, function()
+	-- check if upgrade item is registered
 	if not minetest.registered_items[beacon.config.upgrade_item] then
 		beacon.config.upgrade_item = "default:diamondblock"
 	end
+	-- sort effect ids
+	for id,_ in pairs(beacon.effects) do
+		table.insert(beacon.sorted_effect_ids, id)
+	end
+	table.sort(beacon.sorted_effect_ids)
 end)
 
 print(("[Beacon] Loaded in %f seconds"):format(os.clock() - load_start))

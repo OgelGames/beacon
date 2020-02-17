@@ -16,9 +16,9 @@ end
 local function get_effects_for_level(level)
 	local str = "None"
 	local list = {"none"}
-	for id, def in pairs(beacon.effects) do
-		if def.min_level <= level then
-			str = str..","..minetest.formspec_escape(def.desc_name)
+	for _,id in ipairs(beacon.sorted_effect_ids) do
+		if beacon.effects[id].min_level <= level then
+			str = str..","..minetest.formspec_escape(beacon.effects[id].desc_name)
 			table.insert(list, id)
 		end
 	end
