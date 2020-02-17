@@ -34,8 +34,11 @@ for name,data in pairs(colors) do
 		light_source = minetest.LIGHT_MAX,
 		walkable = false,
 		diggable = false,
-		pointable = false,
 		climbable = beacon.config.beam_climbable,
+		selection_box = { type = "fixed", fixed = {0.05, 0.5, 0.05, -0.05, -0.5, -0.05} },
+		on_rotate = function(pos, node, user, mode, new_param2)
+			return false -- no rotation with screwdriver
+		end,
 	})
 
 	-- beam base
@@ -51,8 +54,11 @@ for name,data in pairs(colors) do
 		light_source = minetest.LIGHT_MAX,
 		walkable = false,
 		diggable = false,
-		pointable = false,
 		climbable = beacon.config.beam_climbable,
+		selection_box = { type = "fixed", fixed = {0.05, 0.5, 0.05, -0.05, -0.5, -0.05} },
+		on_rotate = function(pos, node, user, mode, new_param2)
+			return false -- no rotation with screwdriver
+		end,
 	})
 
 	-- beacon node
