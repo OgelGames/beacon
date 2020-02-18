@@ -56,7 +56,20 @@ function beacon.set_default_meta(pos)
 end
 
 function beacon.place(itemstack, placer, pointed_thing)
-	if not pointed_thing.above or not pointed_thing.under then return itemstack end
+	-- check for correct pointed_thing
+	if not pointed_thing.above or not pointed_thing.under or not pointed_thing.type then 
+		return itemstack, false 
+	end
+	-- check for `on_rightclick` for pointed node
+	if pointed_thing.type == "node" and placer and
+			not placer:get_player_control().sneak then
+		local node = minetest.get_node(pointed_thing.under)
+		local def = minetest.registered_nodes[node.name]
+		if def and def.on_rightclick then
+			return def.on_rightclick(pointed_thing.under, node, placer, itemstack, pointed_thing) or itemstack, false
+		end
+	end
+	-- check if enough room to place beacon
 	local dir = get_dir(pointed_thing)
 	local pos = vector.add(pointed_thing.above, directions[dir].vector)
 	if not can_place(pos, placer) then
@@ -64,8 +77,9 @@ function beacon.place(itemstack, placer, pointed_thing)
 			placer:get_player_name(),
 			"Not enough room to place beacon pointing in "..dir.." direction!"
 		)
-		return itemstack
+		return itemstack, false
 	end
+	-- place beacon
 	return minetest.item_place(itemstack, placer, pointed_thing)
 end
 
