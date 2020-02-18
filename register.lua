@@ -132,10 +132,11 @@ minetest.register_craft({
 })
 
 -- floating beam cleanup
-minetest.register_abm({
+minetest.register_lbm({
+	label = "Floating beacon beam cleanup",
+	name = "beacon:beam_cleanup",
 	nodenames = {"group:beacon_beam"},
-	interval = 2,
-	chance = 2,
+	run_at_every_load = true,
 	action = function(pos, node)
 		local under_pos = vector.add(pos, facedir_under[(node.param2-(node.param2%4))/4])
 		local under_node = minetest.get_node(under_pos)
