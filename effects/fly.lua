@@ -4,6 +4,7 @@
 
 beacon.register_effect("fly", {
 	desc_name = "Flying",
+	info = "Temporarily grants the \"fly\" privilage",
 	on_apply = function(player, name)
 		local privs = minetest.get_player_privs(name)
 		if privs.privs then return end -- don't effect admins

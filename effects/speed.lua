@@ -24,6 +24,7 @@ end
 
 beacon.register_effect("speed1", {
 	desc_name = "Speed Boost LV1",
+	info = "Increases speed by +50%",
 	min_level = 1,
 	on_apply = function(player)
 		on_apply(player, 1.5, "beacon_speed1")
@@ -35,6 +36,7 @@ beacon.register_effect("speed1", {
 
 beacon.register_effect("speed2", {
 	desc_name = "Speed Boost LV2",
+	info = "Increases speed by +100%",
 	min_level = 2,
 	overrides = {"speed1"},
 	on_apply = function(player)
@@ -47,6 +49,7 @@ beacon.register_effect("speed2", {
 
 beacon.register_effect("speed3", {
 	desc_name = "Speed Boost LV3",
+	info = "Increases speed by +150%",
 	min_level = 3,
 	overrides = {"speed1", "speed2"},
 	on_apply = function(player)
@@ -59,6 +62,7 @@ beacon.register_effect("speed3", {
 
 beacon.register_effect("speed4", {
 	desc_name = "Speed Boost LV4",
+	info = "Increases speed by +200%",
 	min_level = 4,
 	overrides = {"speed1", "speed2", "speed3"},
 	on_apply = function(player)

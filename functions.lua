@@ -57,8 +57,8 @@ end
 
 function beacon.place(itemstack, placer, pointed_thing)
 	-- check for correct pointed_thing
-	if not pointed_thing.above or not pointed_thing.under or not pointed_thing.type then 
-		return itemstack, false 
+	if not pointed_thing.above or not pointed_thing.under or not pointed_thing.type then
+		return itemstack, false
 	end
 	-- check for `on_rightclick` for pointed node
 	if pointed_thing.type == "node" and placer and

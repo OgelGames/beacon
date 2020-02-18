@@ -30,6 +30,7 @@ dofile(beacon.modpath.."/functions.lua")
 dofile(beacon.modpath.."/formspec.lua")
 dofile(beacon.modpath.."/effects.lua")
 dofile(beacon.modpath.."/register.lua")
+dofile(beacon.modpath.."/chatcommands.lua")
 
 dofile(beacon.modpath.."/effects/init.lua")
 

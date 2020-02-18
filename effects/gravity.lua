@@ -24,6 +24,7 @@ end
 
 beacon.register_effect("gravityquarter", {
 	desc_name = "Quarter Gravity",
+	info = "25% of the current gravity",
 	min_level = 1,
 	on_apply = function(player)
 		on_apply(player, 0.25, "beacon_gravityquarter")
@@ -35,6 +36,7 @@ beacon.register_effect("gravityquarter", {
 
 beacon.register_effect("gravityhalf", {
 	desc_name = "Half Gravity",
+	info = "50% of the current gravity",
 	min_level = 1,
 	on_apply = function(player)
 		on_apply(player, 0.5, "beacon_gravityhalf")
@@ -46,6 +48,7 @@ beacon.register_effect("gravityhalf", {
 
 beacon.register_effect("gravitydouble", {
 	desc_name = "Double Gravity",
+	info = "200% of the current gravity",
 	min_level = 1,
 	on_apply = function(player)
 		on_apply(player, 2, "beacon_gravitydouble")

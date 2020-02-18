@@ -20,6 +20,7 @@ end
 
 beacon.register_effect("healing1", {
 	desc_name = "Healing LV1",
+	info = "Heals health by +1 HP every 15 seconds",
 	min_level = 2,
 	on_step = function(player, name)
 		on_step(player, name, 15)
@@ -31,6 +32,7 @@ beacon.register_effect("healing1", {
 
 beacon.register_effect("healing2", {
 	desc_name = "Healing LV2",
+	info = "Heals health by +1 HP every 10 seconds",
 	min_level = 3,
 	overrides = {"healing1"},
 	on_step = function(player, name)
@@ -43,6 +45,7 @@ beacon.register_effect("healing2", {
 
 beacon.register_effect("healing3", {
 	desc_name = "Healing LV3",
+	info = "Heals health by +1 HP every 5 seconds",
 	min_level = 4,
 	overrides = {"healing1", "healing2"},
 	on_step = function(player, name)

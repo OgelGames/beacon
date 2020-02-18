@@ -21,6 +21,7 @@ function beacon.register_effect(name, def)
 	end
 	beacon.effects[name] = {
 		desc_name = def.desc_name or "Unnamed Effect",
+		info = def.info or "?",
 		min_level = def.min_level or 0,
 		overrides = def.overrides,
 		on_apply = def.on_apply,

@@ -11,6 +11,7 @@ local water_nodes = {
 
 beacon.register_effect("breathing", {
 	desc_name = "Water Breathing",
+	info = "Allows swiming in water without losing breath",
 	min_level = 3,
 	overrides = {},
 	on_step = function(player, name)

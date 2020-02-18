@@ -24,6 +24,7 @@ end
 
 beacon.register_effect("jump1", {
 	desc_name = "Jump Boost LV1",
+	info = "Increases jump power by +25%",
 	min_level = 1,
 	on_apply = function(player)
 		on_apply(player, 1.25, "beacon_jump1")
@@ -35,6 +36,7 @@ beacon.register_effect("jump1", {
 
 beacon.register_effect("jump2", {
 	desc_name = "Jump Boost LV2",
+	info = "Increases jump power by +50%",
 	min_level = 2,
 	overrides = {"jump1"},
 	on_apply = function(player)
@@ -47,6 +49,7 @@ beacon.register_effect("jump2", {
 
 beacon.register_effect("jump3", {
 	desc_name = "Jump Boost LV3",
+	info = "Increases jump power by +75%",
 	min_level = 3,
 	overrides = {"jump1", "jump2"},
 	on_apply = function(player)
@@ -59,6 +62,7 @@ beacon.register_effect("jump3", {
 
 beacon.register_effect("jump4", {
 	desc_name = "Jump Boost LV4",
+	info = "Increases jump power by +100%",
 	min_level = 4,
 	overrides = {"jump1", "jump2", "jump3"},
 	on_apply = function(player)
