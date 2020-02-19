@@ -110,11 +110,7 @@ for name,data in pairs(colors) do
 			local meta = minetest.get_meta(pos)
 			return not beacon.showing_formspec(pos) and meta:get_inventory():is_empty("beacon_upgrades")
 		end,
-		on_destruct = function(pos)
-			if minetest.get_meta(pos):get_string("active") == "true" then
-				beacon.remove_beam(pos)
-			end
-		end,
+		on_destruct = beacon.remove_beam,
 	})
 
 	-- coloring recipe
