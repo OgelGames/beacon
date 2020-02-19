@@ -158,7 +158,7 @@ function beacon.update(pos, color)
 				local name = player:get_player_name()
 				local offset = vector.subtract(player:get_pos(), pos)
 				local distance = math.max(math.abs(offset.x), math.abs(offset.y), math.abs(offset.z))
-				if distance <= range and beacon.effects[effect] then
+				if distance <= range + 0.5 and beacon.effects[effect] then
 					if not beacon.player_effects[name] then
 						beacon.player_effects[name] = {}
 					end
