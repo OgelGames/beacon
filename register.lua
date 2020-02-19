@@ -35,7 +35,7 @@ for name,data in pairs(colors) do
 		walkable = false,
 		diggable = false,
 		climbable = beacon.config.beam_climbable,
-		selection_box = { type = "fixed", fixed = {0.0625, 0.5, 0.0625, -0.0625, -0.5, -0.0625} },
+		selection_box = { type = "fixed", fixed = {0.125, 0.5, 0.125, -0.125, -0.5, -0.125} },
 		on_rotate = function(pos, node, user, mode, new_param2)
 			return false -- no rotation with screwdriver
 		end,
@@ -55,7 +55,7 @@ for name,data in pairs(colors) do
 		walkable = false,
 		diggable = false,
 		climbable = beacon.config.beam_climbable,
-		selection_box = { type = "fixed", fixed = {0.0625, 0.5, 0.0625, -0.0625, -0.5, -0.0625} },
+		selection_box = { type = "fixed", fixed = {0.125, 0.5, 0.125, -0.125, -0.5, -0.125} },
 		on_rotate = function(pos, node, user, mode, new_param2)
 			return false -- no rotation with screwdriver
 		end,
