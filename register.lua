@@ -68,6 +68,7 @@ for name,data in pairs(colors) do
 		groups = {cracky = 3, oddly_breakable_by_hand = 3, beacon = 1},
 		drawtype = "normal",
 		paramtype = "light",
+		paramtype2 = "facedir",
 		light_source = 13,
 		allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
 			if not beacon.allow_change(pos, player)
@@ -89,9 +90,8 @@ for name,data in pairs(colors) do
 			end
 			return 1
 		end,
-		on_place = beacon.place,
+		on_place = beacon.on_place,
 		after_place_node = function(pos, placer, itemstack, pointed_thing)
-			beacon.place_beam(pos, placer, pointed_thing, name)
 			beacon.set_default_meta(pos)
 		end,
 		on_rightclick = function(pos, node, player, itemstack, pointed_thing)
@@ -110,7 +110,11 @@ for name,data in pairs(colors) do
 			local meta = minetest.get_meta(pos)
 			return not beacon.showing_formspec(pos) and meta:get_inventory():is_empty("beacon_upgrades")
 		end,
-		on_destruct = beacon.remove_beam,
+		on_destruct = function(pos)
+			if minetest.get_meta(pos):get_string("active") == "true" then
+				beacon.remove_beam(pos)
+			end
+		end,
 	})
 
 	-- coloring recipe

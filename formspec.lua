@@ -37,6 +37,10 @@ end
 
 function beacon.show_formspec(pos, name)
 	local meta = minetest.get_meta(pos)
+	if not meta:get_inventory():get_lists().beacon_upgrades then
+		shown_formspecs[name] = nil
+		return
+	end
 	local spos = pos.x..","..pos.y..",".. pos.z
 	local level = get_beacon_level(pos)
 	local effects_string, effects_list = get_effects_for_level(level)
@@ -90,7 +94,6 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	local pos = shown_formspecs[name].pos
 	if minetest.is_protected(pos, name) then return end
 	local meta = minetest.get_meta(pos)
-	local timer = minetest.get_node_timer(pos)
 
 	if formname == "beacon_deactivated_formspec" then
 		if meta:get_string("active") == "true" then return end
@@ -114,14 +117,8 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		meta:set_string("effect", effect)
 
 		-- activate beacon
-		if fields.activate and effect ~= "none" then
-			meta:set_string("active", "true")
-			timer:start(beacon.config.effect_refresh_time)
-			minetest.sound_play("beacon_power_up", {
-				gain = 2.0,
-				pos = pos,
-				max_hear_distance = 32,
-			})
+		if fields.activate then
+			beacon.activate(pos, name)
 		end
 
 		-- check if formspec should be shown again
@@ -137,13 +134,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 
 		-- deactivate beacon
 		if fields.deactivate then
-			meta:set_string("active", "false")
-			timer:stop()
-			minetest.sound_play("beacon_power_down", {
-				gain = 2.0,
-				pos = pos,
-				max_hear_distance = 32,
-			})
+			beacon.deactivate(pos)
 		end
 
 		-- check if formspec should be shown again
