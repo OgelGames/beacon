@@ -29,7 +29,7 @@ function beacon.dir_from_param2(param2)
 	return "+Y" -- default to up
 end
 
-local function get_node(pos)
+function beacon.get_node(pos)
 	local node = minetest.get_node(pos)
 	if node.name == "ignore" then
 		minetest.get_voxel_manip():read_from_map(pos, pos)
@@ -40,7 +40,7 @@ end
 
 local function can_place(pos, name)
 	if not minetest.is_protected(pos, name) then
-		local node = get_node(pos)
+		local node = beacon.get_node(pos)
 		if node then
 			local def = minetest.registered_nodes[node.name]
 			if beacon.config.beam_break_nodes or (def and def.drawtype == "airlike") then
@@ -106,7 +106,7 @@ function beacon.remove_beam(pos)
 	-- remove beam (no need to remove beam base seperately)
 	for _=1, beacon.config.beam_length do
 		pos = vector.add(pos, directions[dir].vector)
-		local node = get_node(pos)
+		local node = beacon.get_node(pos)
 		if node and minetest.get_item_group(node.name, "beacon_beam") == 1 then
 			minetest.set_node(pos, {name = "air"})
 		else

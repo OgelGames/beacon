@@ -150,7 +150,7 @@ minetest.register_lbm({
 	run_at_every_load = true,
 	action = function(pos, node)
 		local under_pos = vector.add(pos, facedir_under[(node.param2-(node.param2%4))/4])
-		local under_node = minetest.get_node(under_pos)
+		local under_node = beacon.get_node(under_pos)
 		if under_node then
 			local def = minetest.registered_nodes[under_node.name]
 			if def and def.drawtype == "airlike" then
