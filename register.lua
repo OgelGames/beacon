@@ -93,6 +93,9 @@ for name,data in pairs(colors) do
 		on_place = beacon.on_place,
 		after_place_node = function(pos, placer, itemstack, pointed_thing)
 			beacon.set_default_meta(pos)
+			if placer and not vector.equals(pointed_thing.above, pointed_thing.under) then
+				beacon.activate(pos, placer:get_player_name())
+			end
 		end,
 		on_rightclick = function(pos, node, player, itemstack, pointed_thing)
 			beacon.show_formspec(pos, player:get_player_name())
@@ -111,6 +114,14 @@ for name,data in pairs(colors) do
 			return not beacon.showing_formspec(pos) and meta:get_inventory():is_empty("beacon_upgrades")
 		end,
 		on_destruct = beacon.remove_beam,
+		on_rotate = function(pos, node, user, mode, new_param2)
+			if not beacon.allow_change(pos, user) then
+				return false
+			end
+			node.param2 = new_param2
+			minetest.swap_node(pos, node)
+			return true
+		end,
 	})
 
 	-- coloring recipe

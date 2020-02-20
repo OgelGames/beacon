@@ -67,7 +67,7 @@ end
 
 function beacon.on_place(itemstack, placer, pointed_thing)
 	-- check for correct pointed_thing
-	if not pointed_thing.above or not pointed_thing.under or pointed_thing.type ~= "node" then
+	if not pointed_thing or not pointed_thing.above or not pointed_thing.under or pointed_thing.type ~= "node" then
 		return itemstack, false
 	end
 	-- place beacon
