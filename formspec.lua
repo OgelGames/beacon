@@ -63,7 +63,7 @@ function beacon.show_formspec(pos, name)
 		"label[4,0;Upgrades]"..
 		"list[nodemeta:"..spos..";beacon_upgrades;4,0.5;4,1;]"..
 		"listring[nodemeta:"..spos..";beacon_upgrades]"..
-		"label[4,1.8;Range (1-"..max_range..")]"..
+		"label[4,1.8;Effect Radius (1-"..max_range..")]"..
 		"field[4.3,2.5;2,1;range;;"..set_range.."]"..
 		"list[current_player;main;0,3.75;8,4;]"..
 		"listring[current_player;main]"
