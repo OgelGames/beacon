@@ -43,7 +43,7 @@ local function can_place(pos, name)
 		local node = beacon.get_node(pos)
 		if node then
 			local def = minetest.registered_nodes[node.name]
-			if beacon.config.beam_break_nodes or (def and def.drawtype == "airlike") then
+			if beacon.config.beam_break_nodes or (def and def.drawtype == "airlike" and def.buildable_to) then
 				return true
 			end
 		end
