@@ -1,26 +1,5 @@
-local colors = {
-	["white"]	= { desc = "White", 	color = "#ffffffff" },
-	["black"]	= { desc = "Black", 	color = "#0f0f0fff" },
-	["blue"]	= { desc = "Blue", 		color = "#0000ffff" },
-	["cyan"]	= { desc = "Cyan", 		color = "#00ffffff" },
-	["green"]	= { desc = "Green", 	color = "#00ff00ff" },
-	["magenta"]	= { desc = "Magenta", 	color = "#ff00ffff" },
-	["orange"]	= { desc = "Orange", 	color = "#ff8000ff" },
-	["red"]		= { desc = "Red", 		color = "#ff0000ff" },
-	["violet"]	= { desc = "Violet", 	color = "#8f00ffff" },
-	["yellow"]	= { desc = "Yellow", 	color = "#ffff00ff" },
-}
 
-local facedir_under = {
-	[4] = {x= 1,y=0,z=0},
-	[3] = {x=-1,y=0,z=0},
-	[5] = {x=0,y= 1,z=0},
-	[0] = {x=0,y=-1,z=0},
-	[2] = {x=0,y=0,z= 1},
-	[1] = {x=0,y=0,z=-1},
-}
-
-for name,data in pairs(colors) do
+for name,data in pairs(beacon.colors) do
 	-- beam
 	minetest.register_node("beacon:"..name.."beam", {
 		description = data.desc.." Beacon Beam",
@@ -149,13 +128,9 @@ minetest.register_lbm({
 	nodenames = {"group:beacon_beam"},
 	run_at_every_load = true,
 	action = function(pos, node)
-		local under_pos = vector.add(pos, facedir_under[(node.param2-(node.param2%4))/4])
-		local under_node = beacon.get_node(under_pos)
-		if under_node then
-			local def = minetest.registered_nodes[under_node.name]
-			if def and def.drawtype == "airlike" then
-				minetest.set_node(pos, {name = "air"})
-			end
+		local under_pos = vector.add(pos, beacon.param2_to_under[node.param2])
+		if beacon.is_airlike_node(under_pos) then
+			minetest.set_node(pos, { name = "air" })
 		end
 	end,
 })

@@ -1,33 +1,3 @@
-local directions = {
-	["+X"] = {vector = {x= 1,y=0,z=0}, param2 = 12},
-	["-X"] = {vector = {x=-1,y=0,z=0}, param2 = 16},
-	["+Y"] = {vector = {x=0,y= 1,z=0}, param2 = 0},
-	["-Y"] = {vector = {x=0,y=-1,z=0}, param2 = 20},
-	["+Z"] = {vector = {x=0,y=0,z= 1}, param2 = 4 },
-	["-Z"] = {vector = {x=0,y=0,z=-1}, param2 = 8 },
-}
-
-function beacon.dir_from_pointed(pointed_thing)
-	local pointed_dir = vector.subtract(pointed_thing.above, pointed_thing.under)
-	if pointed_dir.x ~= 0 then
-		return pointed_dir.x > 0 and "+X" or "-X"
-	elseif pointed_dir.y ~= 0 then
-		return pointed_dir.y > 0 and "+Y" or "-Y"
-	elseif pointed_dir.z ~= 0 then
-		return pointed_dir.z > 0 and "+Z" or "-Z"
-	end
-	return "+Y" -- default to up
-end
-
-function beacon.dir_from_param2(param2)
-	param2 = type(param2) == "number" and param2-(param2%4) or 0
-	for dir,values in pairs(directions) do
-		if values.param2 == param2 then
-			return dir
-		end
-	end
-	return "+Y" -- default to up
-end
 
 function beacon.get_node(pos)
 	local node = minetest.get_node(pos)
@@ -38,16 +8,11 @@ function beacon.get_node(pos)
 	return node
 end
 
-local function can_place(pos, name)
-	if not minetest.is_protected(pos, name) then
-		local node = beacon.get_node(pos)
-		if node then
-			local def = minetest.registered_nodes[node.name]
-			if beacon.config.beam_break_nodes or (def and def.drawtype == "airlike" and def.buildable_to) then
-				return true
-			end
-		end
-	end
+function beacon.is_airlike_node(pos, name)
+	local node = beacon.get_node(pos)
+	if node.name == "air" or node.name == "vacuum:vacuum" then return true end
+	local def = minetest.registered_nodes[node.name]
+	if def and def.drawtype == "airlike" and def.buildable_to then return true end
 	return false
 end
 
@@ -70,55 +35,59 @@ function beacon.on_place(itemstack, placer, pointed_thing)
 	if not pointed_thing or not pointed_thing.above or not pointed_thing.under or pointed_thing.type ~= "node" then
 		return itemstack, false
 	end
+	-- calculate param2 direction from pointed_thing
+	local param2 = 0
+	local pointed_dir = vector.subtract(pointed_thing.above, pointed_thing.under)
+	if pointed_dir.x ~= 0 then
+		param2 = pointed_dir.x > 0 and 12 or 16
+	elseif pointed_dir.y ~= 0 then
+		param2 = pointed_dir.y > 0 and 0 or 20
+	elseif pointed_dir.z ~= 0 then
+		param2 = pointed_dir.z > 0 and 4 or 8
+	end
 	-- place beacon
-	local dir = beacon.dir_from_pointed(pointed_thing)
-	return minetest.item_place(itemstack, placer, pointed_thing, directions[dir].param2)
+	return minetest.item_place(itemstack, placer, pointed_thing, param2)
 end
 
 function beacon.place_beam(pos, player_name, dir)
 	local node_name = minetest.get_node(pos).name
+	local offset = beacon.dir_to_vector[dir]
+	local param2 = beacon.dir_to_param2[dir]
+	local can_break_nodes = beacon.config.beam_break_nodes
 	-- place base
-	pos = vector.add(pos, directions[dir].vector)
-	if not can_place(pos, player_name) then return end
-	minetest.add_node(pos, {
-		name = node_name.."base",
-		param2 = directions[dir].param2
-	})
+	pos = vector.add(pos, offset)
+	minetest.add_node(pos, { name = node_name.."base", param2 = param2 })
 	-- place beam
 	for _=1, beacon.config.beam_length - 1 do
-		pos = vector.add(pos, directions[dir].vector)
-		if not can_place(pos, player_name) then
-			break -- stop placing beam
-		else
-			minetest.add_node(pos, {
-				name = node_name.."beam",
-				param2 = directions[dir].param2
-			})
+		pos = vector.add(pos, offset)
+		if minetest.is_protected(pos, player_name) then return end
+		if not can_break_nodes then
+			if not beacon.is_airlike_node(pos) then return end
 		end
+		minetest.add_node(pos, { name = node_name.."beam", param2 = param2 })
 	end
 end
 
 function beacon.remove_beam(pos)
 	local dir = minetest.get_meta(pos):get_string("beam_dir")
-	if not dir or not directions[dir] then
+	if not dir or not beacon.dir_to_vector[dir] then
 		return -- invalid meta
 	end
+	local offset = beacon.dir_to_vector[dir]
 	-- remove beam (no need to remove beam base seperately)
 	for _=1, beacon.config.beam_length do
-		pos = vector.add(pos, directions[dir].vector)
-		local node = beacon.get_node(pos)
-		if node and minetest.get_item_group(node.name, "beacon_beam") == 1 then
-			minetest.set_node(pos, {name = "air"})
-		else
+		pos = vector.add(pos, offset)
+		if minetest.get_item_group(beacon.get_node(pos).name, "beacon_beam") ~= 1 then
 			break -- end of beam
 		end
+		minetest.set_node(pos, {name = "air"})
 	end
 end
 
 function beacon.activate(pos, player_name)
-	local node = minetest.get_node(pos)
-	local dir = beacon.dir_from_param2(node.param2)
-	if not can_place(vector.add(pos, directions[dir].vector), player_name) then
+	local dir = beacon.param2_to_dir[minetest.get_node(pos).param2]
+	local pos1 = vector.add(pos, beacon.dir_to_vector[dir])
+	if minetest.is_protected(pos1, player_name) or not beacon.is_airlike_node(pos1) then
 		minetest.chat_send_player(player_name, "Not enough room to activate beacon pointing in "..dir.." direction!")
 		return
 	end
@@ -169,8 +138,8 @@ function beacon.update(pos, color)
 	end
 	-- spawn active beacon particles
 	local dir = meta:get_string("beam_dir")
-	if dir and directions[dir] then
-		pos = vector.add(pos, directions[dir].vector)
+	if dir and beacon.dir_to_vector[dir] then
+		pos = vector.add(pos, beacon.dir_to_vector[dir])
 		minetest.add_particlespawner(
 			32, --amount
 			3, --time
