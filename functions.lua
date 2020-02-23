@@ -94,7 +94,7 @@ function beacon.activate(pos, player_name)
 	local meta = minetest.get_meta(pos)
 	meta:set_string("beam_dir", dir)
 	meta:set_string("active", "true")
-	minetest.get_node_timer(pos):start(beacon.config.effect_refresh_time)
+	minetest.get_node_timer(pos):start(3)
 	minetest.sound_play("beacon_power_up", {
 		gain = 2.0,
 		pos = pos,
@@ -119,19 +119,19 @@ end
 function beacon.update(pos, color)
 	local meta = minetest.get_meta(pos)
 	local effect = meta:get_string("effect")
-	if effect ~= "none" then
+	if effect ~= "" and effect ~= "none" and beacon.effects[effect] then
 		-- set effect for each player in range of the beacon
 		local range = meta:get_int("range")
-		if range and range > 0 then
+		if range > 0 then
 			for _,player in ipairs(minetest.get_connected_players()) do
 				local name = player:get_player_name()
 				local offset = vector.subtract(player:get_pos(), pos)
 				local distance = math.max(math.abs(offset.x), math.abs(offset.y), math.abs(offset.z))
-				if distance <= range + 0.5 and beacon.effects[effect] then
-					if not beacon.player_effects[name] then
-						beacon.player_effects[name] = {}
+				if distance <= range + 0.5 then
+					local spos = pos.x..","..pos.y..",".. pos.z
+					if not beacon.player_effects[name].avalible[spos] then
+						beacon.player_effects[name].avalible[spos] = pos
 					end
-					beacon.player_effects[name].avalible[effect] = beacon.config.effect_refresh_time
 				end
 			end
 		end
@@ -157,5 +157,6 @@ function beacon.update(pos, color)
 			"beacon_particle.png^[multiply:"..color --texture
 		)
 	end
+
 	return true
 end

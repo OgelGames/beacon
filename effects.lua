@@ -1,21 +1,33 @@
-
-local function get_useable_effects(name)
-	local useable_effects = beacon.player_effects[name].avalible
-	-- check all the effects granted by nearby beacons
-	for effect,timer in pairs(beacon.player_effects[name].avalible) do
-		if timer < 0 then
-			-- remove the expired effect
-			beacon.player_effects[name].avalible[effect] = nil
-			useable_effects[effect] = nil
-		else
-			if type(beacon.effects[effect].overrides) == "table" then
-				-- remove the effects overridden by the effect
-				for _,override in ipairs(beacon.effects[effect].overrides) do
-					useable_effects[override] = nil
+local function get_useable_effects(name, pos)
+	local useable_effects = {}
+	-- check each of the nearby beacons
+	for spos,beacon_pos in pairs(beacon.player_effects[name].avalible) do
+		local useable = false
+		local meta = minetest.get_meta(beacon_pos)
+		local active = meta:get_string("active")
+		local range = meta:get_int("range")
+		if active == "true" and range > 0 then
+			local offset = vector.subtract(pos, beacon_pos)
+			local distance = math.max(math.abs(offset.x), math.abs(offset.y), math.abs(offset.z))
+			if distance <= range + 0.5 then
+				local effect = meta:get_string("effect")
+				if effect and effect ~= "" and effect ~= "none" then
+					useable_effects[effect] = true
+					useable = true
 				end
 			end
-			-- update the timer
-			beacon.player_effects[name].avalible[effect] = timer - 1
+		end
+		if not useable then
+			beacon.player_effects[name].avalible[spos] = nil
+		end
+	end
+	-- check all the effects granted by in-range beacons
+	for effect,_ in pairs(useable_effects) do
+		if type(beacon.effects[effect].overrides) == "table" then
+			-- remove the effects overridden by the effect
+			for _,override in ipairs(beacon.effects[effect].overrides) do
+				useable_effects[override] = nil
+			end
 		end
 	end
 	return useable_effects
@@ -43,7 +55,7 @@ minetest.register_globalstep(function(dtime)
 		local players = minetest.get_connected_players()
 		for _,player in ipairs(players) do
 			local name = player:get_player_name()
-			local useable = get_useable_effects(name)
+			local useable = get_useable_effects(name, player:get_pos())
 			local active = beacon.player_effects[name].active
 			-- check the player's effects
 			for id,_ in pairs(get_all_effect_ids(active, useable)) do

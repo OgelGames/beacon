@@ -18,7 +18,6 @@ beacon.config = {
 	effect_range_2 = tonumber(minetest.settings:get("beacon_effect_range_3")) or 30,
 	effect_range_3 = tonumber(minetest.settings:get("beacon_effect_range_4")) or 40,
 	effect_range_4 = tonumber(minetest.settings:get("beacon_effect_range_5")) or 50,
-	effect_refresh_time = tonumber(minetest.settings:get("beacon_effect_refresh_time")) or 3,
 	upgrade_item = minetest.settings:get("beacon_upgrade_item") or "default:diamondblock",
 }
 

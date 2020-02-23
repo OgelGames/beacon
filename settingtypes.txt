@@ -7,5 +7,4 @@ beacon_effect_range_1 (Level 1 beacon effect range) int 20
 beacon_effect_range_2 (Level 2 beacon effect range) int 30
 beacon_effect_range_3 (Level 3 beacon effect range) int 40
 beacon_effect_range_4 (Level 4 beacon effect range) int 50
-beacon_refresh_time (Beacon effect refresh time) int 3
 beacon_upgrade_item (Beacon upgrade item) string default:diamondblock
