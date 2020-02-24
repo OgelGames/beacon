@@ -4,7 +4,7 @@ beacon = {}
 
 beacon.effects = {}
 
-beacon.player_effects = {}
+beacon.players = {}
 
 beacon.sorted_effect_ids = {}
 

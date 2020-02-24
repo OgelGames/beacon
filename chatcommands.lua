@@ -10,7 +10,7 @@ end
 local function get_player_defs(name)
 	local defs = {}
 	for _,id in ipairs(beacon.sorted_effect_ids) do
-		if beacon.player_effects[name].active[id] then
+		if beacon.players[name].effects[id] then
 			table.insert(defs, beacon.effects[id])
 		end
 	end

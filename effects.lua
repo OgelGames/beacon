@@ -1,7 +1,7 @@
 local function get_useable_effects(name, pos)
 	local useable_effects = {}
 	-- check each of the nearby beacons
-	for spos,beacon_pos in pairs(beacon.player_effects[name].avalible) do
+	for spos,beacon_pos in pairs(beacon.players[name].beacons) do
 		local useable = false
 		local meta = minetest.get_meta(beacon_pos)
 		local active = meta:get_string("active")
@@ -11,14 +11,14 @@ local function get_useable_effects(name, pos)
 			local distance = math.max(math.abs(offset.x), math.abs(offset.y), math.abs(offset.z))
 			if distance <= range + 0.5 then
 				local effect = meta:get_string("effect")
-				if effect and effect ~= "" and effect ~= "none" then
+				if effect ~= "" and effect ~= "none" and beacon.effects[effect] then
 					useable_effects[effect] = true
 					useable = true
 				end
 			end
 		end
 		if not useable then
-			beacon.player_effects[name].avalible[spos] = nil
+			beacon.players[name].beacons[spos] = nil
 		end
 	end
 	-- check all the effects granted by in-range beacons
@@ -56,7 +56,7 @@ minetest.register_globalstep(function(dtime)
 		for _,player in ipairs(players) do
 			local name = player:get_player_name()
 			local useable = get_useable_effects(name, player:get_pos())
-			local active = beacon.player_effects[name].active
+			local active = beacon.players[name].effects
 			-- check the player's effects
 			for id,_ in pairs(get_all_effect_ids(active, useable)) do
 				-- remove effect
@@ -78,22 +78,22 @@ minetest.register_globalstep(function(dtime)
 					end
 				end
 			end
-			beacon.player_effects[name].active = active
+			beacon.players[name].effects = active
 		end
 	end
 end)
 
 minetest.register_on_joinplayer(function(player)
-	beacon.player_effects[player:get_player_name()] = {avalible = {}, active = {}}
+	beacon.players[player:get_player_name()] = {beacons = {}, effects = {}}
 end)
 
 minetest.register_on_leaveplayer(function(player)
 	local name = player:get_player_name()
-	for id,_ in pairs(beacon.player_effects[name].active) do
+	for id,_ in pairs(beacon.players[name].effects) do
 		-- remove all effects before leaving
 		if beacon.effects[id].on_remove then
 			beacon.effects[id].on_remove(player, name)
 		end
 	end
-	beacon.player_effects[name] = nil
+	beacon.players[name] = nil
 end)
