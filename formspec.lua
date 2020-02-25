@@ -146,3 +146,11 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		return true
 	end
 end)
+
+minetest.register_on_leaveplayer(function(player)
+	shown_formspecs[player:get_player_name()] = nil
+end)
+
+minetest.register_on_dieplayer(function(player)
+	shown_formspecs[player:get_player_name()] = nil
+end)
