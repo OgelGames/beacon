@@ -89,8 +89,17 @@ for name,data in pairs(beacon.colors) do
 			return beacon.update(pos)
 		end,
 		can_dig = function(pos, player)
-			local meta = minetest.get_meta(pos)
-			return not beacon.showing_formspec(pos) and meta:get_inventory():is_empty("beacon_upgrades")
+			return not beacon.showing_formspec(pos)
+		end,
+		after_dig_node = function(pos, oldnode, oldmetadata, digger)
+			if oldmetadata.inventory and oldmetadata.inventory.beacon_upgrades then
+				for _,item in ipairs(oldmetadata.inventory.beacon_upgrades) do
+					local stack = ItemStack(item)
+					if not stack:is_empty() then
+						minetest.add_item(pos, stack)
+					end
+				end
+			end
 		end,
 		on_destruct = beacon.remove_beam,
 		on_rotate = function(pos, node, user, mode, new_param2)
