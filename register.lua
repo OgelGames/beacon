@@ -86,7 +86,7 @@ for name,data in pairs(beacon.colors) do
 			beacon.show_formspec(pos, player:get_player_name())
 		end,
 		on_timer = function(pos, elapsed)
-			return beacon.update(pos, data.color)
+			return beacon.update(pos)
 		end,
 		can_dig = function(pos, player)
 			local meta = minetest.get_meta(pos)

@@ -101,6 +101,7 @@ function beacon.activate(pos, player_name)
 		max_hear_distance = 32,
 	})
 	beacon.place_beam(pos, player_name, dir)
+	beacon.update(pos)
 end
 
 function beacon.deactivate(pos)
@@ -116,7 +117,7 @@ function beacon.deactivate(pos)
 	beacon.remove_beam(pos)
 end
 
-function beacon.update(pos, color)
+function beacon.update(pos)
 	local meta = minetest.get_meta(pos)
 	local effect = meta:get_string("effect")
 	if effect == "" or effect == "none" or not beacon.effects[effect] then
@@ -138,7 +139,8 @@ function beacon.update(pos, color)
 	end
 	-- spawn active beacon particles
 	local dir = meta:get_string("beam_dir")
-	if dir and beacon.dir_to_vector[dir] then
+	local colordef = beacon.colors[string.gsub(beacon.get_node(pos).name, "beacon:", "")]
+	if dir and beacon.dir_to_vector[dir] and colordef and colordef.color then
 		pos = vector.add(pos, beacon.dir_to_vector[dir])
 		minetest.add_particlespawner(
 			32, --amount
@@ -154,7 +156,7 @@ function beacon.update(pos, color)
 			1, --minsize
 			2, --maxsize
 			false, --collisiondetection
-			"beacon_particle.png^[multiply:"..color --texture
+			"beacon_particle.png^[multiply:"..colordef.color --texture
 		)
 	end
 	return true
