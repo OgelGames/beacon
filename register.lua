@@ -49,48 +49,49 @@ for name,data in pairs(beacon.colors) do
 		paramtype = "light",
 		paramtype2 = "facedir",
 		light_source = 13,
+		on_place = beacon.on_place,
+		on_construct = beacon.set_default_meta,
+		after_place_node = function(pos, placer, itemstack, pointed_thing)
+			if placer and not vector.equals(pointed_thing.above, pointed_thing.under) then
+				beacon.activate(pos, placer:get_player_name())
+			end
+			beacon.update_formspec(pos)
+		end,
+		on_timer = function(pos, elapsed)
+			return beacon.update(pos)
+		end,
+		on_rotate = function(pos, node, user, mode, new_param2)
+			if minetest.is_protected(pos, user:get_player_name()) then return false end
+			if minetest.get_meta(pos):get_string("active") == "true" then return false end
+			node.param2 = new_param2
+			minetest.swap_node(pos, node)
+			return true
+		end,
+		on_rightclick = beacon.update_formspec,
+		on_receive_fields = beacon.receive_fields,
 		allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
-			if not beacon.allow_change(pos, player)
+			if minetest.is_protected(pos, player:get_player_name())
 					or not minetest.get_meta(pos):get_inventory():get_stack(to_list, to_index):is_empty() then
 				return 0
 			end
 			return 1
 		end,
 		allow_metadata_inventory_put = function(pos, listname, index, stack, player)
-			if not beacon.allow_change(pos, player) or stack:get_name() ~= beacon.config.upgrade_item
+			if minetest.is_protected(pos, player:get_player_name()) or stack:get_name() ~= beacon.config.upgrade_item
 					or not minetest.get_meta(pos):get_inventory():get_stack(listname, index):is_empty() then
 				return 0
 			end
 			return 1
 		end,
 		allow_metadata_inventory_take = function(pos, listname, index, stack, player)
-			if not beacon.allow_change(pos, player) then
+			if minetest.is_protected(pos, player:get_player_name()) then
 				return 0
 			end
 			return 1
 		end,
-		on_place = beacon.on_place,
-		after_place_node = function(pos, placer, itemstack, pointed_thing)
-			beacon.set_default_meta(pos)
-			if placer and not vector.equals(pointed_thing.above, pointed_thing.under) then
-				beacon.activate(pos, placer:get_player_name())
-			end
-		end,
-		on_rightclick = function(pos, node, player, itemstack, pointed_thing)
-			beacon.show_formspec(pos, player:get_player_name())
-		end,
-		on_metadata_inventory_put = function(pos, listname, index, stack, player)
-			beacon.show_formspec(pos, player:get_player_name())
-		end,
-		on_metadata_inventory_take = function(pos, listname, index, stack, player)
-			beacon.show_formspec(pos, player:get_player_name())
-		end,
-		on_timer = function(pos, elapsed)
-			return beacon.update(pos)
-		end,
-		can_dig = function(pos, player)
-			return not beacon.showing_formspec(pos)
-		end,
+		on_metadata_inventory_put = beacon.update_formspec,
+		on_metadata_inventory_take = beacon.update_formspec,
+		on_destruct = beacon.remove_beam,
 		after_dig_node = function(pos, oldnode, oldmetadata, digger)
 			if oldmetadata.inventory and oldmetadata.inventory.beacon_upgrades then
 				for _,item in ipairs(oldmetadata.inventory.beacon_upgrades) do
@@ -100,15 +101,6 @@ for name,data in pairs(beacon.colors) do
 					end
 				end
 			end
-		end,
-		on_destruct = beacon.remove_beam,
-		on_rotate = function(pos, node, user, mode, new_param2)
-			if not beacon.allow_change(pos, user) then
-				return false
-			end
-			node.param2 = new_param2
-			minetest.swap_node(pos, node)
-			return true
 		end,
 	})
 
@@ -154,18 +146,17 @@ minetest.register_lbm({
 		local meta = minetest.get_meta(pos)
 		beacon.set_default_meta(pos)
 		meta:set_string("beam_dir", "+Y")
+		meta:set_string("active", "true")
+		minetest.get_node_timer(pos):start(3)
 		-- old beacon effects
 		if node.name == "beacon:green" then
 			meta:set_string("effect", "fly")
 			meta:set_int("range", 30)
-			meta:set_string("active", "true")
-			minetest.get_node_timer(pos):start(3)
 		elseif node.name == "beacon:red" then
 			meta:set_string("effect", "healing2")
 			meta:set_int("range", 30)
-			meta:set_string("active", "true")
-			minetest.get_node_timer(pos):start(3)
 		end
+		beacon.update_formspec(pos)
 	end
 })
 

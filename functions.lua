@@ -16,12 +16,6 @@ function beacon.is_airlike_node(pos, name)
 	return false
 end
 
-function beacon.allow_change(pos, player)
-	if minetest.is_protected(pos, player:get_player_name()) then return false end
-	if minetest.get_meta(pos):get_string("active") == "true" then return false end
-	return true
-end
-
 function beacon.set_default_meta(pos)
 	local meta = minetest.get_meta(pos)
 	meta:set_int("range", beacon.config.effect_range_0)

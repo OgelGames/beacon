@@ -1,5 +1,12 @@
 
-local shown_formspecs = {}
+local base_formspec =
+	"size[8,7.5]" ..
+	"label[0,0;Beacon Effect]"..
+	"label[4,0;Upgrades]"..
+	"list[context;beacon_upgrades;4,0.5;4,1;]"..
+	"listring[context;beacon_upgrades]"..
+	"list[current_player;main;0,3.75;8,4;]"..
+	"listring[current_player;main]"
 
 local function get_beacon_level(pos)
 	local inv = minetest.get_meta(pos):get_inventory()
@@ -35,16 +42,10 @@ local function limit_range(range, level)
 	return range
 end
 
-function beacon.show_formspec(pos, name)
+function beacon.update_formspec(pos)
 	local meta = minetest.get_meta(pos)
-	if not meta:get_inventory():get_lists().beacon_upgrades then
-		shown_formspecs[name] = nil
-		return
-	end
-	local spos = pos.x..","..pos.y..",".. pos.z
 	local level = get_beacon_level(pos)
 	local effects_string, effects_list = get_effects_for_level(level)
-
 	local max_range = beacon.config["effect_range_"..level]
 	local set_range = meta:get_int("range")
 	local effect = meta:get_string("effect")
@@ -56,101 +57,44 @@ function beacon.show_formspec(pos, name)
 			break
 		end
 	end
+
 	local formspec =
-		"size[8,7.5]" ..
-		"label[0,0;Beacon Effect]"..
+		base_formspec..
 		"textlist[0,0.5;3.5,2.475;effects;"..effects_string..";"..index.."]"..
-		"label[4,0;Upgrades]"..
-		"list[nodemeta:"..spos..";beacon_upgrades;4,0.5;4,1;]"..
-		"listring[nodemeta:"..spos..";beacon_upgrades]"..
 		"label[4,1.8;Effect Radius (1-"..max_range..")]"..
-		"field[4.3,2.5;2,1;range;;"..set_range.."]"..
-		"list[current_player;main;0,3.75;8,4;]"..
-		"listring[current_player;main]"
+		"field[4.3,2.5;2,1;range;;"..set_range.."]"
 
 	if meta:get_string("active") == "true" then
-		minetest.show_formspec(name, "beacon_activated_formspec",
-			formspec.."button_exit[6,2.175;2,1;deactivate;Deactivate Beacon]")
+		formspec = formspec.."button_exit[6,2.175;2,1;deactivate;Deactivate Beacon]"
 	else
-		minetest.show_formspec(name, "beacon_deactivated_formspec",
-			formspec.."button_exit[6,2.175;2,1;activate;Activate Beacon]")
+		formspec = formspec.."button_exit[6,2.175;2,1;activate;Activate Beacon]"
 	end
-	shown_formspecs[name] = {list = effects_list, pos = pos}
+	meta:set_string("formspec", formspec)
 end
 
-function beacon.showing_formspec(pos)
-	for _,data in pairs(shown_formspecs) do
-		if vector.equals(data.pos, pos) then
-			return true
-		end
-	end
-	return false
-end
-
-minetest.register_on_player_receive_fields(function(player, formname, fields)
+function beacon.receive_fields(pos, formname, fields, player)
 	if not player then return end
 	local name = player:get_player_name()
-	if not shown_formspecs[name] then return end
-	local pos = shown_formspecs[name].pos
 	if minetest.is_protected(pos, name) then return end
 	local meta = minetest.get_meta(pos)
+	local level = get_beacon_level(pos)
 
-	if formname == "beacon_deactivated_formspec" then
-		if meta:get_string("active") == "true" then return end
-
-		-- set range
-		local level = get_beacon_level(pos)
+	if fields.range then
 		meta:set_int("range", limit_range(fields.range, level))
-
-		-- set effect
-		local effect = meta:get_string("effect")
-		local event = minetest.explode_textlist_event(fields.effects)
-		if event.type == "CHG" then
-			effect = shown_formspecs[name].list[event.index] or effect
-		end
-		if effect ~= "none" then
-			local def = beacon.effects[effect]
-			if not def or def.min_level > level then
-				effect = "none"
-			end
-		end
-		meta:set_string("effect", effect)
-
-		-- activate beacon
-		if fields.activate then
-			beacon.activate(pos, name)
-		end
-
-		-- check if formspec should be shown again
-		if fields.quit then
-			shown_formspecs[name] = nil
-		else
-			beacon.show_formspec(pos, name)
-		end
-		return true
-
-	elseif formname == "beacon_activated_formspec" then
-		if meta:get_string("active") ~= "true" then return end
-
-		-- deactivate beacon
-		if fields.deactivate then
-			beacon.deactivate(pos)
-		end
-
-		-- check if formspec should be shown again
-		if fields.quit then
-			shown_formspecs[name] = nil
-		else
-			beacon.show_formspec(pos, name)
-		end
-		return true
 	end
-end)
 
-minetest.register_on_leaveplayer(function(player)
-	shown_formspecs[player:get_player_name()] = nil
-end)
+	local event = minetest.explode_textlist_event(fields.effects)
+	if event.type == "CHG" then
+		local _,effect_list = get_effects_for_level(level)
+		local effect = effect_list[event.index] or "none"
+		meta:set_string("effect", effect)
+	end
 
-minetest.register_on_dieplayer(function(player)
-	shown_formspecs[player:get_player_name()] = nil
-end)
+	if fields.activate then
+		beacon.activate(pos, name)
+	elseif fields.deactivate then
+		beacon.deactivate(pos)
+	end
+
+	beacon.update_formspec(pos)
+end
