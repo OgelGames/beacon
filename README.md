@@ -1,6 +1,7 @@
 # Beacons Redo [beacon]
 
 [![Build Status](https://travis-ci.org/OgelGames/beacon.svg?branch=master)](https://travis-ci.org/OgelGames/beacon)
+[![License](https://img.shields.io/badge/License-MIT%20and%20CC%20BY--SA%204.0-green.svg)](LICENSE.md)
 
 ## Table of Contents
 
@@ -37,4 +38,4 @@ To install this mod, simply download it using one of the methods below, and plac
 
 ## License
 
-TODO.
+Except for any exceptions stated in [LICENSE.md](LICENSE.md#exceptions), all code is licensed under the [MIT License](LICENSE.md#mit-license), with all textures, models, sounds, and other media licensed under the [CC BY-SA 4.0 License](LICENSE.md#cc-by-sa-40-license). 
