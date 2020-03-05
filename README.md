@@ -16,6 +16,8 @@
 
 A redo of [Simple Beacons by AgentNagel42](https://forum.minetest.net/viewtopic.php?f=11&t=12041), this mod adds colored beacons that can grant effects to players.
 
+![Overview Screenshot](screenshots/overview.png?raw=true "Overview Screenshot")
+
 ## Features
 
 TODO.
