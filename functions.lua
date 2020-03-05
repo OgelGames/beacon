@@ -10,6 +10,7 @@ end
 
 function beacon.is_airlike_node(pos, name)
 	local node = beacon.get_node(pos)
+	if node.name == "ignore" then return false end
 	if node.name == "air" or node.name == "vacuum:vacuum" then return true end
 	local def = minetest.registered_nodes[node.name]
 	if def and def.drawtype == "airlike" and def.buildable_to then return true end
