@@ -5,7 +5,7 @@ minetest.register_chatcommand("beacon_effects", {
 	func = function(caller, param)
 		param = param:trim()
 		local name = (param ~= "" and param or caller)
-		if not minetest.get_player_by_name(name) then
+		if not minetest.get_player_by_name(name) or not beacon.players[name] then
 			return false, "Player " .. name .. " does not exist or is not online."
 		end
 		local output = name == caller and {"Your active effects:"} or {name.."'s active effects:"}
@@ -24,7 +24,7 @@ minetest.register_chatcommand("beacon_nearby", {
 	func = function(caller, param)
 		param = param:trim()
 		local name = (param ~= "" and param or caller)
-		if not minetest.get_player_by_name(name) then
+		if not minetest.get_player_by_name(name) or not beacon.players[name] then
 			return false, "Player " .. name .. " does not exist or is not online."
 		end
 		local output = name == caller and {"Beacons near you:"} or {"Beacons near "..name..":"}

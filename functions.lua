@@ -116,7 +116,7 @@ function beacon.update(pos)
 	local meta = minetest.get_meta(pos)
 	local effect = meta:get_string("effect")
 	if effect == "" or effect == "none" or not beacon.effects[effect] then
-		return true -- effect not set in metadata / no beacon effects
+		return true -- effect not set in metadata / no beacon effects / invalid effect
 	end
 	local range = meta:get_int("range")
 	if not range or range == 0 then return true end -- range not set in metadata
@@ -124,7 +124,7 @@ function beacon.update(pos)
 	for _,player in ipairs(minetest.get_connected_players()) do
 		local name = player:get_player_name()
 		local spos = pos.x..","..pos.y..",".. pos.z
-		if not beacon.players[name].beacons[spos] then
+		if beacon.players[name] and not beacon.players[name].beacons[spos] then
 			local offset = vector.subtract(player:get_pos(), pos)
 			local distance = math.max(math.abs(offset.x), math.abs(offset.y), math.abs(offset.z))
 			if distance <= range + 0.5 then

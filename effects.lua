@@ -55,30 +55,32 @@ minetest.register_globalstep(function(dtime)
 		local players = minetest.get_connected_players()
 		for _,player in ipairs(players) do
 			local name = player:get_player_name()
-			local useable = get_useable_effects(name, player:get_pos())
-			local active = beacon.players[name].effects
-			-- check the player's effects
-			for id,_ in pairs(get_all_effect_ids(active, useable)) do
-				-- remove effect
-				if active[id] and not useable[id] then
-					active[id] = nil
-					if beacon.effects[id].on_remove then
-						beacon.effects[id].on_remove(player, name)
-					end
-				-- add effect
-				elseif useable[id] and not active[id] then
-					active[id] = true
-					if beacon.effects[id].on_apply then
-						beacon.effects[id].on_apply(player, name)
-					end
-				-- update effect
-				else
-					if beacon.effects[id].on_step then
-						beacon.effects[id].on_step(player, name)
+			if beacon.players[name] then
+				local useable = get_useable_effects(name, player:get_pos())
+				local active = beacon.players[name].effects
+				-- check the player's effects
+				for id,_ in pairs(get_all_effect_ids(active, useable)) do
+					-- remove effect
+					if active[id] and not useable[id] then
+						active[id] = nil
+						if beacon.effects[id].on_remove then
+							beacon.effects[id].on_remove(player, name)
+						end
+					-- add effect
+					elseif useable[id] and not active[id] then
+						active[id] = true
+						if beacon.effects[id].on_apply then
+							beacon.effects[id].on_apply(player, name)
+						end
+					-- update effect
+					else
+						if beacon.effects[id].on_step then
+							beacon.effects[id].on_step(player, name)
+						end
 					end
 				end
+				beacon.players[name].effects = active
 			end
-			beacon.players[name].effects = active
 		end
 	end
 end)
@@ -89,6 +91,7 @@ end)
 
 minetest.register_on_leaveplayer(function(player)
 	local name = player:get_player_name()
+	if not beacon.players[name] then return end
 	for id,_ in pairs(beacon.players[name].effects) do
 		-- remove all effects before leaving
 		if beacon.effects[id].on_remove then
