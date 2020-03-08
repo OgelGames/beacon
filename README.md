@@ -1,6 +1,6 @@
 # Beacons Redo [beacon]
 
-[![Build Status](https://travis-ci.org/OgelGames/beacon.svg?branch=master)](https://travis-ci.org/OgelGames/beacon)
+[![Build](https://github.com/OgelGames/beacon/workflows/Build/badge.svg)](https://github.com/OgelGames/beacon/actions)
 [![License](https://img.shields.io/badge/License-MIT%20and%20CC%20BY--SA%204.0-green.svg)](LICENSE.md)
 
 ## Table of Contents
