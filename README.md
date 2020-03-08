@@ -28,15 +28,19 @@ TODO.
 
 ## Dependencies
 
-Currently this mod only depends on `default` and `dye` from [Minetest Game](https://github.com/minetest/minetest_game), with an optional (but recommended) dependency on [`player_monoids`](https://github.com/minetest-mods/player_monoids).
+**Required**
+
+- `default` (included in [Minetest Game](https://github.com/minetest/minetest_game))
+
+- `dye` (included in [Minetest Game](https://github.com/minetest/minetest_game))
+
+**Optional**
+
+- [`player_monoids`](https://github.com/minetest-mods/player_monoids) (recommended)
 
 ## Installation
 
-To install this mod, simply download it using one of the methods below, and place it in one of [Minetest's mod folders](https://dev.minetest.net/Installing_Mods).
-
-- Clone the Git repository using `git clone https://github.com/OgelGames/beacon.git` or the [GitHub Desktop](https://desktop.github.com/) app.
-- Download the Git repository as a ZIP file: https://github.com/OgelGames/beacon/archive/master.zip
-- Download the latest stable release: https://github.com/OgelGames/beacon/releases
+Download the [master branch](https://github.com/OgelGames/beacon/archive/master.zip) or the [latest release](https://github.com/OgelGames/beacon/releases), or clone the repository using Git or the [GitHub Desktop](https://desktop.github.com/) app, and follow [these instructions](https://dev.minetest.net/Installing_Mods).
 
 ## License
 
