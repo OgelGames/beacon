@@ -1,12 +1,24 @@
 
-local base_formspec =
-	"size[8,7.5]" ..
-	"label[0,0;Beacon Effect]"..
-	"label[4,0;Upgrades]"..
-	"list[context;beacon_upgrades;4,0.5;4,1;]"..
-	"listring[context;beacon_upgrades]"..
-	"list[current_player;main;0,3.75;8,4;]"..
-	"listring[current_player;main]"
+local base_formspec = ""
+
+local function get_base_formspec()
+	if base_formspec == "" then
+		base_formspec =
+			"size[8,8]" ..
+			"label[0,0;Beacon Effect]"..
+			"label[4,0;Upgrades]"..
+			"list[context;beacon_upgrades;4,0.5;4,1;]"..
+			"listring[context;beacon_upgrades]"..
+			"list[current_player;main;0,4.25;8,4;]"..
+			"listring[current_player;main]"..
+			"item_image[4,0.5;1,1;"..beacon.config.upgrade_item.."]"..
+			"item_image[5,0.5;1,1;"..beacon.config.upgrade_item.."]"..
+			"item_image[6,0.5;1,1;"..beacon.config.upgrade_item.."]"..
+			"item_image[7,0.5;1,1;"..beacon.config.upgrade_item.."]"..
+			"button_exit[4,2.875;4,1;save;Save]"
+	end
+	return base_formspec
+end
 
 local function get_beacon_level(pos)
 	local inv = minetest.get_meta(pos):get_inventory()
@@ -59,15 +71,15 @@ function beacon.update_formspec(pos)
 	end
 
 	local formspec =
-		base_formspec..
-		"textlist[0,0.5;3.5,2.475;effects;"..effects_string..";"..index.."]"..
-		"label[4,1.8;Effect Radius (1-"..max_range..")]"..
-		"field[4.3,2.5;2,1;range;;"..set_range.."]"
+		get_base_formspec()..
+		"textlist[0,0.5;3.8,2.225;effects;"..effects_string..";"..index.."]"..
+		"label[4,1.55;Effect Radius (1-"..max_range..")]"..
+		"field[4.285,2.25;4,1;range;;"..set_range.."]"
 
 	if meta:get_string("active") == "true" then
-		formspec = formspec.."button_exit[6,2.175;2,1;deactivate;Deactivate Beacon]"
+		formspec = formspec.."button_exit[0,2.875;4,1;deactivate;Deactivate Beacon]"
 	else
-		formspec = formspec.."button_exit[6,2.175;2,1;activate;Activate Beacon]"
+		formspec = formspec.."button_exit[0,2.875;4,1;activate;Activate Beacon]"
 	end
 	meta:set_string("formspec", formspec)
 end
