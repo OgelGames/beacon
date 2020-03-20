@@ -18,4 +18,5 @@ read_globals = {
 	
 	-- Mod Deps
 	"player_monoids",
+	"digilines",
 }

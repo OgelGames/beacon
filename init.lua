@@ -79,12 +79,16 @@ beacon.param2_to_dir = {
 
 beacon.has_player_monoids = minetest.global_exists("player_monoids")
 
+beacon.has_digilines = minetest.global_exists("digilines")
+
 beacon.modpath = minetest.get_modpath(minetest.get_current_modname())
 
 dofile(beacon.modpath.."/api.lua")
+dofile(beacon.modpath.."/helpers.lua")
 dofile(beacon.modpath.."/functions.lua")
 dofile(beacon.modpath.."/formspec.lua")
 dofile(beacon.modpath.."/effects.lua")
+dofile(beacon.modpath.."/digiline.lua")
 dofile(beacon.modpath.."/register.lua")
 dofile(beacon.modpath.."/chatcommands.lua")
 

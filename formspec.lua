@@ -16,55 +16,31 @@ local function get_base_formspec()
 			"item_image[6,0.5;1,1;"..beacon.config.upgrade_item.."]"..
 			"item_image[7,0.5;1,1;"..beacon.config.upgrade_item.."]"..
 			"button_exit[4,2.875;4,1;save;Save]"
+		if beacon.has_digilines then
+			base_formspec = base_formspec..
+			"field[4.285,2.25;2,1;range;;${range}]"..
+			"label[6,1.55;Digiline Channel]"..
+			"field[6.285,2.25;2,1;channel;;${channel}]"
+		else
+			base_formspec = base_formspec..
+			"field[4.285,2.25;4,1;range;;${range}]"
+		end
 	end
 	return base_formspec
 end
 
-local function get_beacon_level(pos)
-	local inv = minetest.get_meta(pos):get_inventory()
-	local level = 0
-	for i = 1, inv:get_size("beacon_upgrades") do
-		local stack = inv:get_stack("beacon_upgrades", i)
-		if not stack:is_empty() then
-			level = level + 1
-		end
-	end
-	return level
-end
-
-local function get_effects_for_level(level)
-	local str = "None"
-	local list = {"none"}
-	for _,id in ipairs(beacon.sorted_effect_ids) do
-		if beacon.effects[id].min_level <= level then
-			str = str..","..minetest.formspec_escape(beacon.effects[id].desc_name)
-			table.insert(list, id)
-		end
-	end
-	return str, list
-end
-
-local function limit_range(range, level)
-	if not level then return 0 end
-	local max_range = beacon.config["effect_range_"..level]
-	range = tonumber(range)
-	if not range then return max_range end
-	range = math.min(range, max_range)
-	range = math.max(range, 1)
-	return range
-end
-
 function beacon.update_formspec(pos)
 	local meta = minetest.get_meta(pos)
-	local level = get_beacon_level(pos)
-	local effects_string, effects_list = get_effects_for_level(level)
+	local level = beacon.get_level(pos)
+	local effect_names, effect_ids = beacon.get_effects_for_level(level)
 	local max_range = beacon.config["effect_range_"..level]
-	local set_range = meta:get_int("range")
 	local effect = meta:get_string("effect")
 
+	effect_names = table.concat(effect_names, ",")
+
 	local index = 1
-	for i=1, #effects_list do
-		if effects_list[i] == effect then
+	for i=1, #effect_ids do
+		if effect_ids[i] == effect then
 			index = i
 			break
 		end
@@ -72,9 +48,8 @@ function beacon.update_formspec(pos)
 
 	local formspec =
 		get_base_formspec()..
-		"textlist[0,0.5;3.8,2.225;effects;"..effects_string..";"..index.."]"..
-		"label[4,1.55;Effect Radius (1-"..max_range..")]"..
-		"field[4.285,2.25;4,1;range;;"..set_range.."]"
+		"textlist[0,0.5;3.8,2.225;effects;"..effect_names..";"..index.."]"..
+		"label[4,1.55;Effect Radius (1-"..max_range..")]"
 
 	if meta:get_string("active") == "true" then
 		formspec = formspec.."button_exit[0,2.875;4,1;deactivate;Deactivate Beacon]"
@@ -89,15 +64,19 @@ function beacon.receive_fields(pos, formname, fields, player)
 	local name = player:get_player_name()
 	if minetest.is_protected(pos, name) then return end
 	local meta = minetest.get_meta(pos)
-	local level = get_beacon_level(pos)
+	local level = beacon.get_level(pos)
 
 	if fields.range then
-		meta:set_int("range", limit_range(fields.range, level))
+		meta:set_int("range", beacon.limit_range(fields.range, level))
+	end
+
+	if fields.channel then
+		meta:set_string("channel", fields.channel)
 	end
 
 	local event = minetest.explode_textlist_event(fields.effects)
 	if event.type == "CHG" then
-		local _,effect_list = get_effects_for_level(level)
+		local _,effect_list = beacon.get_effects_for_level(level)
 		local effect = effect_list[event.index] or "none"
 		meta:set_string("effect", effect)
 	end

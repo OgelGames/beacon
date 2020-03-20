@@ -102,6 +102,12 @@ for name,data in pairs(beacon.colors) do
 				end
 			end
 		end,
+		digiline = {
+			receptor = {},
+			effector = {
+				action = beacon.digiline_effector
+			},
+		},
 	})
 
 	-- coloring recipe

@@ -1,30 +1,4 @@
 
-function beacon.get_node(pos)
-	local node = minetest.get_node(pos)
-	if node.name == "ignore" then
-		minetest.get_voxel_manip():read_from_map(pos, pos)
-		node = minetest.get_node(pos)
-	end
-	return node
-end
-
-function beacon.is_airlike_node(pos, name)
-	local node = beacon.get_node(pos)
-	if node.name == "ignore" then return false end
-	if node.name == "air" or node.name == "vacuum:vacuum" then return true end
-	local def = minetest.registered_nodes[node.name]
-	if def and def.drawtype == "airlike" and def.buildable_to then return true end
-	return false
-end
-
-function beacon.set_default_meta(pos)
-	local meta = minetest.get_meta(pos)
-	meta:set_int("range", beacon.config.effect_range_0)
-	meta:set_string("effect", beacon.config.default_effect)
-	meta:set_string("active", "false")
-	meta:get_inventory():set_size("beacon_upgrades", 4)
-end
-
 function beacon.on_place(itemstack, placer, pointed_thing)
 	-- check for correct pointed_thing
 	if not pointed_thing or not pointed_thing.above or not pointed_thing.under or pointed_thing.type ~= "node" then
