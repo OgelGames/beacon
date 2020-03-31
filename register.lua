@@ -50,8 +50,8 @@ for name,data in pairs(beacon.colors) do
 		paramtype2 = "facedir",
 		light_source = 13,
 		on_place = beacon.on_place,
-		on_construct = beacon.set_default_meta,
 		after_place_node = function(pos, placer, itemstack, pointed_thing)
+			beacon.set_default_meta(pos)
 			if placer and not vector.equals(pointed_thing.above, pointed_thing.under) then
 				beacon.activate(pos, placer:get_player_name())
 			end
