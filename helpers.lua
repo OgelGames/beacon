@@ -8,7 +8,7 @@ function beacon.get_node(pos)
 	return node
 end
 
-function beacon.is_airlike_node(pos, name)
+function beacon.is_airlike_node(pos)
 	local node = beacon.get_node(pos)
 	if node.name == "ignore" then return false end
 	if node.name == "air" or node.name == "vacuum:vacuum" then return true end
