@@ -150,6 +150,9 @@ minetest.register_lbm({
 	run_at_every_load = false,
 	action = function(pos, node)
 		local meta = minetest.get_meta(pos)
+		if meta:get_string("effect") ~= "" then
+			return -- already converted
+		end
 		beacon.set_default_meta(pos)
 		meta:set_string("beam_dir", "+Y")
 		meta:set_string("active", "true")
