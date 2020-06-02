@@ -13,7 +13,8 @@ function beacon.digiline_effector(pos, _, channel, msg)
 	if msg.command == "get" then
 		digilines.receptor_send(pos, digilines.rules.default, set_channel, {
 			radius = meta:get_int("range"),
-			effect = meta:get_string("effect")
+			effect = meta:get_string("effect"),
+			active = meta:get_string("active") == "true" and true or false,
 		})
 
 	elseif msg.command == "get_effects" then
