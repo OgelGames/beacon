@@ -47,7 +47,7 @@ function beacon.remove_beam(pos)
 	for _=1, beacon.config.beam_length do
 		pos = vector.add(pos, offset)
 		if minetest.get_item_group(beacon.get_node(pos).name, "beacon_beam") ~= 1 then
-			break -- end of beam
+			return -- end of beam
 		end
 		minetest.set_node(pos, {name = "air"})
 	end

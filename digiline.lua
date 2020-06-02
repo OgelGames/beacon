@@ -35,5 +35,13 @@ function beacon.digiline_effector(pos, _, channel, msg)
 		elseif type(msg.radius) == "number" then
 			meta:set_int("range", beacon.limit_range(msg.radius, level))
 		end
+
+		if type(msg.active) == "boolean" then
+			if msg.active and meta:get_string("active") == "false" then
+				beacon.activate(pos, meta:get_string("owner"))
+			elseif not msg.active and meta:get_string("active") == "true" then
+				beacon.deactivate(pos)
+			end
+		end
 	end
 end

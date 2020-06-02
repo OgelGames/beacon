@@ -51,9 +51,10 @@ for name,data in pairs(beacon.colors) do
 		light_source = 13,
 		on_place = beacon.on_place,
 		after_place_node = function(pos, placer, itemstack, pointed_thing)
-			beacon.set_default_meta(pos)
-			if placer and not vector.equals(pointed_thing.above, pointed_thing.under) then
-				beacon.activate(pos, placer:get_player_name())
+			local player_name = placer and placer:get_player_name() or ""
+			beacon.set_default_meta(pos, player_name)
+			if not vector.equals(pointed_thing.above, pointed_thing.under) then
+				beacon.activate(pos, player_name)
 			end
 			beacon.update_formspec(pos)
 		end,
@@ -153,7 +154,7 @@ minetest.register_lbm({
 		if meta:get_string("effect") ~= "" then
 			return -- already converted
 		end
-		beacon.set_default_meta(pos)
+		beacon.set_default_meta(pos, "")
 		meta:set_string("beam_dir", "+Y")
 		meta:set_string("active", "true")
 		minetest.get_node_timer(pos):start(3)
