@@ -64,7 +64,7 @@ function beacon.receive_fields(pos, formname, fields, player)
 	local name = player:get_player_name()
 	local meta = minetest.get_meta(pos)
 	if minetest.is_protected(pos, name) and name ~= meta:get_string("owner") then
-		return 
+		return
 	end
 	local level = beacon.get_level(pos)
 

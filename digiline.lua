@@ -21,7 +21,7 @@ function beacon.digiline_effector(pos, _, channel, msg)
 	if channel ~= set_channel then
 		return
 	end
-	
+
 	if type(msg) ~= "table" then
 		if type(msg) == "string" then
 			msg = msg_to_table(msg)

@@ -28,7 +28,7 @@ function beacon.register_effect(name, def)
 		minetest.log("warning", "[Beacon] Not registering effect \""..name.."\", definition is invalid")
 		return
 	end
-	
+
 	beacon.effects[name] = {
 		desc_name = def.desc_name or "Unnamed Effect",
 		info = def.info or "?",
