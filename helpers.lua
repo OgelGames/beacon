@@ -22,7 +22,7 @@ function beacon.set_default_meta(pos, player_name)
 	meta:set_int("range", beacon.config.effect_range_0)
 	meta:set_string("effect", beacon.config.default_effect)
 	meta:set_string("active", "false")
-	meta:set_string("channel", "beacon_"..pos.x.."_"..pos.y.."_"..pos.z)
+	meta:set_string("channel", "beacon"..minetest.pos_to_string(pos))
 	meta:get_inventory():set_size("beacon_upgrades", 4)
 	meta:set_string("owner", player_name)
 end

@@ -1,13 +1,3 @@
---[[
-beacon.register_effect("id_name", {
-	desc_name = "Name",
-	min_level = 0,
-	overrides = {},
-	on_apply = function(player, name) end,
-	on_step = function(player, name) end,
-	on_remove = function(player, name) end,
-})
-]]
 
 function beacon.register_effect(name, def)
 	if name == nil then
