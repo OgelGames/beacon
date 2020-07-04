@@ -1,13 +1,33 @@
 
-function beacon.digiline_effector(pos, _, channel, msg)
-	if type(msg) ~= "table" then
-		return
+local function msg_to_table(str)
+	if str == "get" or str == "GET" then
+		return {command = "get"}
+	elseif str == "activate" or str == "enable" or str == "on" then
+		return {command = "set", active = true}
+	elseif str == "deactivate" or str == "disable" or str == "off" then
+		return {command = "set", active = false}
+	elseif beacon.effects[str] or str == "none" then
+		return {command = "set", effect = str}
+	elseif tonumber(str) then
+		return {command = "set", range = tonumber(str)}
 	end
+	return {}
+end
+
+function beacon.digiline_effector(pos, _, channel, msg)
 
 	local meta = minetest.get_meta(pos)
 	local set_channel = meta:get_string("channel")
 	if channel ~= set_channel then
 		return
+	end
+	
+	if type(msg) ~= "table" then
+		if type(msg) == "string" then
+			msg = msg_to_table(msg)
+		else
+			return
+		end
 	end
 
 	if msg.command == "get" then
