@@ -8,6 +8,8 @@
 - [Overview](#overview)
 - [Features](#features)
 - [Usage](#usage)
+- [Digilines Support](#digilines-support)
+- [Effect API](#effect-api)
 - [Dependencies](#dependencies)
 - [Installation](#installation)
 - [License](#license)
@@ -26,17 +28,25 @@ TODO.
 
 TODO.
 
+## Digilines Support
+
+Beacons can be controlled with digilines messages, to change their effect and range, and to activate and deactivate them. More details and examples can be found in [digilines.md](digilines.md) (TODO).
+
+## Effect API
+
+Other mods can register additional beacon effects, or change or remove existing ones. More details can be found in [api.md](api.md) (TODO), and an example can be found [here](https://github.com/OgelGames/beacon_extras) (TODO).
+
 ## Dependencies
 
 **Required**
 
 - `default` (included in [Minetest Game](https://github.com/minetest/minetest_game))
-
 - `dye` (included in [Minetest Game](https://github.com/minetest/minetest_game))
 
 **Optional**
 
 - [`player_monoids`](https://github.com/minetest-mods/player_monoids) (recommended)
+- [`digilines`](https://github.com/minetest-mods/digilines)
 
 ## Installation
 
