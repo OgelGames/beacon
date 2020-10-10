@@ -46,7 +46,8 @@ function beacon.remove_beam(pos)
 	-- remove beam (no need to remove beam base seperately)
 	for _=1, beacon.config.beam_length do
 		pos = vector.add(pos, offset)
-		if minetest.get_item_group(beacon.get_node(pos).name, "beacon_beam") ~= 1 then
+		local node = beacon.get_node(pos)
+		if minetest.get_item_group(node.name, "beacon_beam") ~= 1 or beacon.param2_to_dir[node.param2] ~= dir then
 			return -- end of beam
 		end
 		minetest.set_node(pos, {name = "air"})
