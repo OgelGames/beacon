@@ -8,18 +8,25 @@ beacon.players = {}
 
 beacon.sorted_effect_ids = {}
 
+local function get_value(value, default)
+	if value == nil then
+		return default
+	end
+	return value
+end
+
 beacon.config = {
-	beam_break_nodes = minetest.settings:get_bool("beacon_beam_break_nodes") or false,
-	beam_climbable = minetest.settings:get_bool("beacon_beam_climbable") or true,
-	beam_length = tonumber(minetest.settings:get("beacon_beam_length")) or 200,
-	default_effect = minetest.settings:get("beacon_default_effect") or "none",
-	effect_range_0 = tonumber(minetest.settings:get("beacon_effect_range_0")) or 10,
-	effect_range_1 = tonumber(minetest.settings:get("beacon_effect_range_1")) or 20,
-	effect_range_2 = tonumber(minetest.settings:get("beacon_effect_range_3")) or 30,
-	effect_range_3 = tonumber(minetest.settings:get("beacon_effect_range_4")) or 40,
-	effect_range_4 = tonumber(minetest.settings:get("beacon_effect_range_5")) or 50,
-	upgrade_item = minetest.settings:get("beacon_upgrade_item") or "default:diamondblock",
-	area_shielding = minetest.settings:get("beacon_area_shielding") or true,
+	area_shielding = get_value(minetest.settings:get("beacon_area_shielding"), false),
+	beam_break_nodes = get_value(minetest.settings:get_bool("beacon_beam_break_nodes"), false),
+	beam_climbable = get_value(minetest.settings:get_bool("beacon_beam_climbable"), true),
+	beam_length = get_value(tonumber(minetest.settings:get("beacon_beam_length")), 200),
+	default_effect = get_value(minetest.settings:get("beacon_default_effect"), "none"),
+	effect_range_0 = get_value(tonumber(minetest.settings:get("beacon_effect_range_0")), 10),
+	effect_range_1 = get_value(tonumber(minetest.settings:get("beacon_effect_range_1")), 20),
+	effect_range_2 = get_value(tonumber(minetest.settings:get("beacon_effect_range_3")), 30),
+	effect_range_3 = get_value(tonumber(minetest.settings:get("beacon_effect_range_4")), 40),
+	effect_range_4 = get_value(tonumber(minetest.settings:get("beacon_effect_range_5")), 50),
+	upgrade_item = get_value(minetest.settings:get("beacon_upgrade_item"), "default:diamondblock"),
 }
 
 beacon.colors = {
