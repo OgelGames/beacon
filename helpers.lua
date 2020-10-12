@@ -59,3 +59,10 @@ function beacon.limit_range(range, level)
 	range = math.max(range, 1)
 	return range
 end
+
+function beacon.can_effect(pos, beacon_owner)
+	if beacon.has_areas and beacon.config.area_shielding then
+		return areas:canInteract(pos, beacon_owner)
+	end
+	return true
+end

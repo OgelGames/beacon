@@ -12,8 +12,11 @@ local function get_useable_effects(name, pos)
 			if distance <= range + 0.5 then
 				local effect = meta:get_string("effect")
 				if effect ~= "" and effect ~= "none" and beacon.effects[effect] then
-					useable_effects[effect] = true
-					useable = true
+					local owner = meta:get_string("owner")
+					if owner == "" or beacon.can_effect(pos, owner) then
+						useable_effects[effect] = true
+						useable = true
+					end
 				end
 			end
 		end

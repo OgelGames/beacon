@@ -47,6 +47,7 @@ Other mods can register additional beacon effects, or change or remove existing 
 
 - [`player_monoids`](https://github.com/minetest-mods/player_monoids) (recommended)
 - [`digilines`](https://github.com/minetest-mods/digilines)
+- [`areas`](https://github.com/minetest-mods/areas)
 
 ## Installation
 

@@ -19,6 +19,7 @@ beacon.config = {
 	effect_range_3 = tonumber(minetest.settings:get("beacon_effect_range_4")) or 40,
 	effect_range_4 = tonumber(minetest.settings:get("beacon_effect_range_5")) or 50,
 	upgrade_item = minetest.settings:get("beacon_upgrade_item") or "default:diamondblock",
+	area_shielding = minetest.settings:get("beacon_area_shielding") or true,
 }
 
 beacon.colors = {
@@ -80,6 +81,8 @@ beacon.param2_to_dir = {
 beacon.has_player_monoids = minetest.global_exists("player_monoids")
 
 beacon.has_digilines = minetest.global_exists("digilines")
+
+beacon.has_areas = minetest.global_exists("areas")
 
 beacon.modpath = minetest.get_modpath(minetest.get_current_modname())
 
