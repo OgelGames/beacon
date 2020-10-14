@@ -4,6 +4,8 @@ beacon = {}
 
 beacon.effects = {}
 
+beacon.colors = {}
+
 beacon.players = {}
 
 beacon.sorted_effect_ids = {}
@@ -27,19 +29,6 @@ beacon.config = {
 	effect_range_3 = get_value(tonumber(minetest.settings:get("beacon_effect_range_4")), 40),
 	effect_range_4 = get_value(tonumber(minetest.settings:get("beacon_effect_range_5")), 50),
 	upgrade_item = get_value(minetest.settings:get("beacon_upgrade_item"), "default:diamondblock"),
-}
-
-beacon.colors = {
-	["white"]	= { desc = "White", 	color = "#ffffffff" },
-	["black"]	= { desc = "Black", 	color = "#0f0f0fff" },
-	["blue"]	= { desc = "Blue", 		color = "#0000ffff" },
-	["cyan"]	= { desc = "Cyan", 		color = "#00ffffff" },
-	["green"]	= { desc = "Green", 	color = "#00ff00ff" },
-	["magenta"]	= { desc = "Magenta", 	color = "#ff00ffff" },
-	["orange"]	= { desc = "Orange", 	color = "#ff8000ff" },
-	["red"]		= { desc = "Red", 		color = "#ff0000ff" },
-	["violet"]	= { desc = "Violet", 	color = "#8f00ffff" },
-	["yellow"]	= { desc = "Yellow", 	color = "#ffff00ff" },
 }
 
 beacon.dir_to_vector = {
