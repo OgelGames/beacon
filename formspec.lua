@@ -36,6 +36,8 @@ function beacon.update_formspec(pos)
 	local max_range = beacon.config["effect_range_"..level]
 	local effect = meta:get_string("effect")
 
+	meta:set_int("range", beacon.limit_range(meta:get_int("range"), level))
+
 	effect_names = table.concat(effect_names, ",")
 
 	local index = 1

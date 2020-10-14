@@ -32,7 +32,7 @@ function beacon.get_level(pos)
 	local level = 0
 	for i = 1, inv:get_size("beacon_upgrades") do
 		local stack = inv:get_stack("beacon_upgrades", i)
-		if not stack:is_empty() then
+		if not stack:is_empty() and stack:get_name() == beacon.config.upgrade_item then
 			level = level + 1
 		end
 	end
