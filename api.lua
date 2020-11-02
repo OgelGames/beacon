@@ -106,6 +106,7 @@ function beacon.register_color(name, colorstring, coloring_item)
 		diggable = false,
 		climbable = beacon.config.beam_climbable,
 		selection_box = { type = "fixed", fixed = {0.125, 0.5, 0.125, -0.125, -0.5, -0.125} },
+		on_place = beacon.on_place,
 		on_rotate = function(pos, node, user, mode, new_param2)
 			return false -- no rotation with screwdriver
 		end,
@@ -126,6 +127,7 @@ function beacon.register_color(name, colorstring, coloring_item)
 		diggable = false,
 		climbable = beacon.config.beam_climbable,
 		selection_box = { type = "fixed", fixed = {0.125, 0.5, 0.125, -0.125, -0.5, -0.125} },
+		on_place = beacon.on_place,
 		on_rotate = function(pos, node, user, mode, new_param2)
 			return false -- no rotation with screwdriver
 		end,
@@ -211,3 +213,4 @@ function beacon.register_color(name, colorstring, coloring_item)
 		})
 	end
 end
+
