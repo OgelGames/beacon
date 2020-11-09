@@ -125,8 +125,8 @@ function beacon.update(pos)
 			maxexptime = 1,
 			minsize = 1,
 			maxsize = 2,
-			collisiondetection = false,
 			texture = "beacon_particle.png^[multiply:"..colordef.color,
+			glow = 14,
 		})
 	end
 	return true
