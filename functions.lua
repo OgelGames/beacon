@@ -112,22 +112,22 @@ function beacon.update(pos)
 	local colordef = beacon.colors[string.gsub(beacon.get_node(pos).name, "beacon:", "")]
 	if dir and beacon.dir_to_vector[dir] and colordef and colordef.color then
 		pos = vector.add(pos, beacon.dir_to_vector[dir])
-		minetest.add_particlespawner(
-			32, --amount
-			3, --time
-			{x=pos.x-0.25, y=pos.y-0.25, z=pos.z-0.25}, --minpos
-			{x=pos.x+0.25, y=pos.y+0.25, z=pos.z+0.25}, --maxpos
-			{x=-0.8, y=-0.8, z=-0.8}, --minvel
-			{x=0.8, y=0.8, z=0.8}, --maxvel
-			{x=0,y=0,z=0}, --minacc
-			{x=0,y=0,z=0}, --maxacc
-			0.5, --minexptime
-			1, --maxexptime
-			1, --minsize
-			2, --maxsize
-			false, --collisiondetection
-			"beacon_particle.png^[multiply:"..colordef.color --texture
-		)
+		minetest.add_particlespawner({
+			amount = 32,
+			time = 3,
+			minpos = {x=pos.x-0.25, y=pos.y-0.25, z=pos.z-0.25},
+			maxpos = {x=pos.x+0.25, y=pos.y+0.25, z=pos.z+0.25},
+			minvel = {x=-0.8, y=-0.8, z=-0.8},
+			maxvel = {x=0.8, y=0.8, z=0.8},
+			minacc = {x=0,y=0,z=0},
+			maxacc = {x=0,y=0,z=0},
+			minexptime = 0.5,
+			maxexptime = 1,
+			minsize = 1,
+			maxsize = 2,
+			collisiondetection = false,
+			texture = "beacon_particle.png^[multiply:"..colordef.color,
+		})
 	end
 	return true
 end
