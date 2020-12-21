@@ -107,9 +107,7 @@ function beacon.register_color(name, colorstring, coloring_item)
 		climbable = beacon.config.beam_climbable,
 		selection_box = { type = "fixed", fixed = {0.125, 0.5, 0.125, -0.125, -0.5, -0.125} },
 		on_place = beacon.on_place,
-		on_rotate = function(pos, node, user, mode, new_param2)
-			return false -- no rotation with screwdriver
-		end,
+		on_rotate = false,  -- no rotation with screwdriver
 	})
 
 	-- beam base
@@ -128,9 +126,7 @@ function beacon.register_color(name, colorstring, coloring_item)
 		climbable = beacon.config.beam_climbable,
 		selection_box = { type = "fixed", fixed = {0.125, 0.5, 0.125, -0.125, -0.5, -0.125} },
 		on_place = beacon.on_place,
-		on_rotate = function(pos, node, user, mode, new_param2)
-			return false -- no rotation with screwdriver
-		end,
+		on_rotate = false,  -- no rotation with screwdriver
 	})
 
 	-- beacon node
@@ -155,8 +151,9 @@ function beacon.register_color(name, colorstring, coloring_item)
 			return beacon.update(pos)
 		end,
 		on_rotate = function(pos, node, user, mode, new_param2)
-			if minetest.is_protected(pos, user:get_player_name()) then return false end
-			if minetest.get_meta(pos):get_string("active") == "true" then return false end
+			if minetest.get_meta(pos):get_string("active") == "true" then
+				return false
+			end
 			node.param2 = new_param2
 			minetest.swap_node(pos, node)
 			return true
