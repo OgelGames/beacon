@@ -95,6 +95,7 @@ function beacon.register_color(name, colorstring, coloring_item)
 	minetest.register_node("beacon:"..id.."beam", {
 		description = name.." Beacon Beam",
 		tiles = {"beacon_beam.png^[multiply:"..colorstring},
+		use_texture_alpha = "blend",
 		inventory_image = "beacon_beam.png^[multiply:"..colorstring,
 		groups = {beacon_beam = 1, not_in_creative_inventory = 1},
 		drawtype = "mesh",
@@ -114,6 +115,7 @@ function beacon.register_color(name, colorstring, coloring_item)
 	minetest.register_node("beacon:"..id.."base", {
 		description = name.." Beacon Beam Base",
 		tiles = {"beacon_beambase.png^[multiply:"..colorstring},
+		use_texture_alpha = "blend",
 		inventory_image = "beacon_beambase.png^[multiply:"..colorstring,
 		groups = {beacon_beam = 1, not_in_creative_inventory = 1},
 		drawtype = "mesh",
