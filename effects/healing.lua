@@ -2,6 +2,11 @@
 -- Healing - +1 HP every 5, 10, or 15 seconds
 --------------------------------------------------
 
+if not minetest.settings:get_bool("enable_damage") then
+	minetest.log("info", "[Beacon] Healing effect will not be available when damage is disabled")
+	return
+end
+
 local timer = {}
 
 local function on_step(player, name, seconds)
@@ -10,9 +15,11 @@ local function on_step(player, name, seconds)
 	end
 	if timer[name] >= seconds then
 		timer[name] = 0
-		local hp = player:get_hp() + 1
+		local hp = player:get_hp()
 		local hp_max = player:get_properties().hp_max
-		if hp <= hp_max then player:set_hp(hp) end
+		if hp > 0 and hp < hp_max then
+			player:set_hp(hp + 1)
+		end
 	else
 		timer[name] = timer[name] + 1
 	end
