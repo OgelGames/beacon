@@ -1,11 +1,35 @@
+# If enabled, and the area mod is installed, protected areas will block effects from other players' beacons.
 beacon_area_shielding (Protected areas block effects) bool false
+
+# If enabled, beacon beams will punch through solid blocks when they are created.
 beacon_beam_break_nodes (Beacon beam breaks nodes) bool false
+
+# If enabled, beacon beams can be climbed like a ladder.
 beacon_beam_climbable (Climbable beacon beam) bool true
+
+# The maximum length of beacon beams.
 beacon_beam_length (Maximum beam length) int 200
+
+# The effect that is set when a beacon is first placed.
 beacon_default_effect (Default beacon effect) string none
+
+# The maximum range of a level 0 beacon (no upgrade items).
 beacon_effect_range_0 (Level 0 beacon effect range) int 10
+
+# The maximum range of a level 1 beacon (one upgrade item).
 beacon_effect_range_1 (Level 1 beacon effect range) int 20
+
+# The maximum range of a level 2 beacon (two upgrade items).
 beacon_effect_range_2 (Level 2 beacon effect range) int 30
+
+# The maximum range of a level 3 beacon (three upgrade items).
 beacon_effect_range_3 (Level 3 beacon effect range) int 40
+
+# The maximum range of a level 4 beacon (four upgrade items).
 beacon_effect_range_4 (Level 4 beacon effect range) int 50
+
+# The time in seconds that an unloaded and out-of-range beacon will remain cached.
+beacon_forget_time (Beacon cache forget time) int 60
+
+# The item to be placed inside beacons to upgrade them.
 beacon_upgrade_item (Beacon upgrade item) string default:diamondblock
