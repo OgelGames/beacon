@@ -149,9 +149,7 @@ function beacon.register_color(name, colorstring, coloring_item)
 			end
 			beacon.update_formspec(pos)
 		end,
-		on_timer = function(pos, elapsed)
-			return beacon.update(pos)
-		end,
+		on_timer = beacon.update,
 		on_rotate = function(pos, node, user, mode, new_param2)
 			if minetest.get_meta(pos):get_string("active") == "true" then
 				return false
@@ -184,7 +182,10 @@ function beacon.register_color(name, colorstring, coloring_item)
 		end,
 		on_metadata_inventory_put = beacon.update_formspec,
 		on_metadata_inventory_take = beacon.update_formspec,
-		on_destruct = beacon.remove_beam,
+		on_destruct = function(pos)
+			beacon.remove_beam(pos)
+			beacon.mark_inactive(pos)
+		end,
 		after_dig_node = function(pos, oldnode, oldmetadata, digger)
 			if oldmetadata.inventory and oldmetadata.inventory.beacon_upgrades then
 				for _,item in ipairs(oldmetadata.inventory.beacon_upgrades) do

@@ -1,14 +1,16 @@
+
 local load_start = os.clock()
 
-beacon = {}
-
-beacon.effects = {}
-
-beacon.colors = {}
-
-beacon.players = {}
-
-beacon.sorted_effect_ids = {}
+beacon = {
+	modpath = minetest.get_modpath("beacon"),
+	has_player_monoids = minetest.global_exists("player_monoids"),
+	has_digilines = minetest.global_exists("digilines"),
+	has_areas = minetest.global_exists("areas"),
+	colors = {},
+	effects = {},
+	sorted_effect_ids = {},
+	players = {},
+}
 
 local function get_value(value, default)
 	if value == nil then
@@ -28,6 +30,7 @@ beacon.config = {
 	effect_range_2 = get_value(tonumber(minetest.settings:get("beacon_effect_range_3")), 30),
 	effect_range_3 = get_value(tonumber(minetest.settings:get("beacon_effect_range_4")), 40),
 	effect_range_4 = get_value(tonumber(minetest.settings:get("beacon_effect_range_5")), 50),
+	forget_time = get_value(tonumber(minetest.settings:get("beacon_forget_time")), 60),
 	upgrade_item = get_value(minetest.settings:get("beacon_upgrade_item"), "default:diamondblock"),
 }
 
@@ -74,14 +77,6 @@ beacon.param2_to_dir = {
 	[20] = "-Y", [21] = "-Y", [22] = "-Y", [23] = "-Y",
 }
 
-beacon.has_player_monoids = minetest.global_exists("player_monoids")
-
-beacon.has_digilines = minetest.global_exists("digilines")
-
-beacon.has_areas = minetest.global_exists("areas")
-
-beacon.modpath = minetest.get_modpath(minetest.get_current_modname())
-
 dofile(beacon.modpath.."/api.lua")
 dofile(beacon.modpath.."/helpers.lua")
 dofile(beacon.modpath.."/functions.lua")
@@ -103,7 +98,7 @@ minetest.after(0, function()
 		beacon.config.default_effect = "none"
 	end
 	-- sort effect ids
-	for id,_ in pairs(beacon.effects) do
+	for id in pairs(beacon.effects) do
 		table.insert(beacon.sorted_effect_ids, id)
 	end
 	table.sort(beacon.sorted_effect_ids)

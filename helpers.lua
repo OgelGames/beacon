@@ -1,7 +1,7 @@
 
 function beacon.get_node(pos)
-	local node = minetest.get_node(pos)
-	if node.name == "ignore" then
+	local node = minetest.get_node_or_nil(pos)
+	if not node then
 		minetest.get_voxel_manip():read_from_map(pos, pos)
 		node = minetest.get_node(pos)
 	end

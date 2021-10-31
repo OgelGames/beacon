@@ -71,7 +71,7 @@ function beacon.activate(pos, player_name)
 		max_hear_distance = 32,
 	})
 	beacon.place_beam(pos, player_name, dir)
-	beacon.update(pos)
+	beacon.mark_active(pos)
 end
 
 function beacon.deactivate(pos)
@@ -85,30 +85,15 @@ function beacon.deactivate(pos)
 		max_hear_distance = 32,
 	})
 	beacon.remove_beam(pos)
+	beacon.mark_inactive(pos)
 end
 
 function beacon.update(pos)
-	local meta = minetest.get_meta(pos)
-	local effect = meta:get_string("effect")
-	if effect == "" or effect == "none" or not beacon.effects[effect] then
-		return true -- effect not set in metadata / no beacon effects / invalid effect
-	end
-	local range = meta:get_int("range")
-	if not range or range == 0 then return true end -- range not set in metadata
-	-- check players
-	for _,player in ipairs(minetest.get_connected_players()) do
-		local name = player:get_player_name()
-		local spos = pos.x..","..pos.y..",".. pos.z
-		if beacon.players[name] and not beacon.players[name].beacons[spos] then
-			local offset = vector.subtract(player:get_pos(), pos)
-			local distance = math.max(math.abs(offset.x), math.abs(offset.y), math.abs(offset.z))
-			if distance <= range + 0.5 then
-				beacon.players[name].beacons[spos] = pos
-			end
-		end
+	if not beacon.check_beacon(pos) then
+		return true -- no particles when not granting any effect
 	end
 	-- spawn active beacon particles
-	local dir = meta:get_string("beam_dir")
+	local dir = minetest.get_meta(pos):get_string("beam_dir")
 	local colordef = beacon.colors[string.gsub(beacon.get_node(pos).name, "beacon:", "")]
 	if dir and beacon.dir_to_vector[dir] and colordef and colordef.color then
 		pos = vector.add(pos, beacon.dir_to_vector[dir])

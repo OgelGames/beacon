@@ -28,13 +28,12 @@ minetest.register_chatcommand("beacon_nearby", {
 			return false, "Player " .. name .. " does not exist or is not online."
 		end
 		local output = name == caller and {"Beacons near you:"} or {"Beacons near "..name..":"}
-		for spos,pos in pairs(beacon.players[name].beacons) do
-			local effect = minetest.get_meta(pos):get_string("effect")
-			if effect ~= "" and effect ~= "none" and beacon.effects[effect] then
-				local def = minetest.registered_nodes[beacon.get_node(pos).name]
-				if def and def.description then
-					table.insert(output, "- "..def.description.." @ "..spos.." - "..beacon.effects[effect].desc_name)
-				end
+		for spos,info in pairs(beacon.players[name].beacons) do
+			local node = beacon.get_node(info.pos)
+			local def = minetest.registered_nodes[node.name]
+			if def and def.description then
+				local effect = beacon.effects[info.effect].desc_name
+				table.insert(output, "- "..def.description.." @ "..spos.." - "..effect)
 			end
 		end
 		return true, table.concat(output, "\n")
