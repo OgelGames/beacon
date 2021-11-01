@@ -1,6 +1,6 @@
 
 local active_beacons = {}
-local forget_time = beacon.config.forget_time
+local forget_time = beacon.config.cache_time
 
 local function get_beacon_info(pos)
 	local meta = minetest.get_meta(pos)

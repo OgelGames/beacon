@@ -24,13 +24,13 @@ beacon.config = {
 	beam_break_nodes = get_value(minetest.settings:get_bool("beacon_beam_break_nodes"), false),
 	beam_climbable = get_value(minetest.settings:get_bool("beacon_beam_climbable"), true),
 	beam_length = get_value(tonumber(minetest.settings:get("beacon_beam_length")), 200),
+	cache_time = get_value(tonumber(minetest.settings:get("beacon_forget_time")), 60),
 	default_effect = get_value(minetest.settings:get("beacon_default_effect"), "none"),
 	effect_range_0 = get_value(tonumber(minetest.settings:get("beacon_effect_range_0")), 10),
 	effect_range_1 = get_value(tonumber(minetest.settings:get("beacon_effect_range_1")), 20),
 	effect_range_2 = get_value(tonumber(minetest.settings:get("beacon_effect_range_3")), 30),
 	effect_range_3 = get_value(tonumber(minetest.settings:get("beacon_effect_range_4")), 40),
 	effect_range_4 = get_value(tonumber(minetest.settings:get("beacon_effect_range_5")), 50),
-	forget_time = get_value(tonumber(minetest.settings:get("beacon_forget_time")), 60),
 	upgrade_item = get_value(minetest.settings:get("beacon_upgrade_item"), "default:diamondblock"),
 }
 

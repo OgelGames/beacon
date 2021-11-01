@@ -10,6 +10,9 @@ beacon_beam_climbable (Climbable beacon beam) bool true
 # The maximum length of beacon beams.
 beacon_beam_length (Maximum beam length) int 200
 
+# The time in seconds that an unloaded and out-of-range beacon will remain cached.
+beacon_cache_time (Beacon cache time) int 60
+
 # The effect that is set when a beacon is first placed.
 beacon_default_effect (Default beacon effect) string none
 
@@ -27,9 +30,6 @@ beacon_effect_range_3 (Level 3 beacon effect range) int 40
 
 # The maximum range of a level 4 beacon (four upgrade items).
 beacon_effect_range_4 (Level 4 beacon effect range) int 50
-
-# The time in seconds that an unloaded and out-of-range beacon will remain cached.
-beacon_forget_time (Beacon cache forget time) int 60
 
 # The item to be placed inside beacons to upgrade them.
 beacon_upgrade_item (Beacon upgrade item) string default:diamondblock
