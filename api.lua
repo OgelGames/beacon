@@ -196,6 +196,12 @@ function beacon.register_color(name, colorstring, coloring_item)
 				end
 			end
 		end,
+		on_movenode = function(from_pos, to_pos)
+			beacon.check_beacon(to_pos)
+			minetest.after(1, function()
+				beacon.mark_inactive(from_pos)
+			end)
+		end,
 		digiline = {
 			receptor = {},
 			effector = {
