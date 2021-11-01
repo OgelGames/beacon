@@ -4,7 +4,7 @@ local base_formspec = ""
 local function get_base_formspec()
 	if base_formspec == "" then
 		base_formspec =
-			"size[8,8]" ..
+			"size[8,8]"..
 			"label[0,0;Beacon Effect]"..
 			"label[4,0;Upgrades]"..
 			"list[context;beacon_upgrades;4,0.5;4,1;]"..

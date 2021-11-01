@@ -1,10 +1,10 @@
 
 function beacon.on_place(itemstack, placer, pointed_thing)
-	-- check for correct pointed_thing
+	-- Check for correct pointed_thing
 	if not pointed_thing or not pointed_thing.above or not pointed_thing.under or pointed_thing.type ~= "node" then
 		return itemstack, false
 	end
-	-- calculate param2 direction from pointed_thing
+	-- Calculate param2 direction from pointed_thing
 	local param2 = 0
 	local pointed_dir = vector.subtract(pointed_thing.above, pointed_thing.under)
 	if pointed_dir.x ~= 0 then
@@ -14,7 +14,7 @@ function beacon.on_place(itemstack, placer, pointed_thing)
 	elseif pointed_dir.z ~= 0 then
 		param2 = pointed_dir.z > 0 and 4 or 8
 	end
-	-- place beacon
+	-- Place beacon
 	return minetest.item_place(itemstack, placer, pointed_thing, param2)
 end
 
@@ -23,32 +23,32 @@ function beacon.place_beam(pos, player_name, dir)
 	local offset = beacon.dir_to_vector[dir]
 	local param2 = beacon.dir_to_param2[dir]
 	local can_break_nodes = beacon.config.beam_break_nodes
-	-- place base
+	-- Place base
 	pos = vector.add(pos, offset)
-	minetest.add_node(pos, { name = node_name.."base", param2 = param2 })
-	-- place beam
+	minetest.add_node(pos, {name = node_name.."base", param2 = param2})
+	-- Place beam
 	for _=1, beacon.config.beam_length - 1 do
 		pos = vector.add(pos, offset)
 		if minetest.is_protected(pos, player_name) then return end
 		if not can_break_nodes then
 			if not beacon.is_airlike_node(pos) then return end
 		end
-		minetest.add_node(pos, { name = node_name.."beam", param2 = param2 })
+		minetest.add_node(pos, {name = node_name.."beam", param2 = param2})
 	end
 end
 
 function beacon.remove_beam(pos)
 	local dir = minetest.get_meta(pos):get_string("beam_dir")
 	if not dir or not beacon.dir_to_vector[dir] then
-		return -- invalid meta
+		return  -- Invalid meta
 	end
 	local offset = beacon.dir_to_vector[dir]
-	-- remove beam (no need to remove beam base seperately)
+	-- Remove beam (no need to remove beam base seperately)
 	for _=1, beacon.config.beam_length do
 		pos = vector.add(pos, offset)
 		local node = beacon.get_node(pos)
 		if minetest.get_item_group(node.name, "beacon_beam") ~= 1 or beacon.param2_to_dir[node.param2] ~= dir then
-			return -- end of beam
+			return  -- End of beam
 		end
 		minetest.set_node(pos, {name = "air"})
 	end
@@ -90,9 +90,9 @@ end
 
 function beacon.update(pos)
 	if not beacon.check_beacon(pos) then
-		return true -- no particles when not granting any effect
+		return true  -- No particles when not granting any effect
 	end
-	-- spawn active beacon particles
+	-- Spawn active beacon particles
 	local dir = minetest.get_meta(pos):get_string("beam_dir")
 	local colordef = beacon.colors[string.gsub(beacon.get_node(pos).name, "beacon:", "")]
 	if dir and beacon.dir_to_vector[dir] and colordef and colordef.color then

@@ -89,15 +89,15 @@ dofile(beacon.modpath.."/chatcommands.lua")
 dofile(beacon.modpath.."/effects/init.lua")
 
 minetest.after(0, function()
-	-- check if upgrade item is registered
+	-- Check if upgrade item is registered
 	if not minetest.registered_items[beacon.config.upgrade_item] then
 		beacon.config.upgrade_item = "default:diamondblock"
 	end
-	-- check if default effect is registered
+	-- Check if default effect is registered
 	if not beacon.effects[beacon.config.default_effect] then
 		beacon.config.default_effect = "none"
 	end
-	-- sort effect ids
+	-- Sort effect ids
 	for id in pairs(beacon.effects) do
 		table.insert(beacon.sorted_effect_ids, id)
 	end

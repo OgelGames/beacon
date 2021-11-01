@@ -89,9 +89,9 @@ function beacon.register_color(name, colorstring, coloring_item)
 		return
 	end
 
-	beacon.colors[id] = { desc = name, color = colorstring }
+	beacon.colors[id] = {desc = name, color = colorstring}
 
-	-- beam
+	-- Beam
 	minetest.register_node("beacon:"..id.."beam", {
 		description = name.." Beacon Beam",
 		tiles = {"beacon_beam.png^[multiply:"..colorstring},
@@ -106,12 +106,12 @@ function beacon.register_color(name, colorstring, coloring_item)
 		walkable = false,
 		diggable = false,
 		climbable = beacon.config.beam_climbable,
-		selection_box = { type = "fixed", fixed = {0.125, 0.5, 0.125, -0.125, -0.5, -0.125} },
+		selection_box = {type = "fixed", fixed = {0.125, 0.5, 0.125, -0.125, -0.5, -0.125}},
 		on_place = beacon.on_place,
-		on_rotate = false,  -- no rotation with screwdriver
+		on_rotate = false,  -- No rotation with screwdriver
 	})
 
-	-- beam base
+	-- Beam base
 	minetest.register_node("beacon:"..id.."base", {
 		description = name.." Beacon Beam Base",
 		tiles = {"beacon_beambase.png^[multiply:"..colorstring},
@@ -126,12 +126,12 @@ function beacon.register_color(name, colorstring, coloring_item)
 		walkable = false,
 		diggable = false,
 		climbable = beacon.config.beam_climbable,
-		selection_box = { type = "fixed", fixed = {0.125, 0.5, 0.125, -0.125, -0.5, -0.125} },
+		selection_box = {type = "fixed", fixed = {0.125, 0.5, 0.125, -0.125, -0.5, -0.125}},
 		on_place = beacon.on_place,
-		on_rotate = false,  -- no rotation with screwdriver
+		on_rotate = false,  -- No rotation with screwdriver
 	})
 
-	-- beacon node
+	-- Beacon node
 	minetest.register_node("beacon:"..id, {
 		description = name.." Beacon",
 		tiles = {"(beacon_baseglow.png^[multiply:"..colorstring..")^beacon_base.png"},
@@ -188,7 +188,7 @@ function beacon.register_color(name, colorstring, coloring_item)
 		end,
 		after_dig_node = function(pos, oldnode, oldmetadata, digger)
 			if oldmetadata.inventory and oldmetadata.inventory.beacon_upgrades then
-				for _,item in ipairs(oldmetadata.inventory.beacon_upgrades) do
+				for _,item in pairs(oldmetadata.inventory.beacon_upgrades) do
 					local stack = ItemStack(item)
 					if not stack:is_empty() then
 						minetest.add_item(pos, stack)
@@ -198,9 +198,7 @@ function beacon.register_color(name, colorstring, coloring_item)
 		end,
 		on_movenode = function(from_pos, to_pos)
 			beacon.check_beacon(to_pos)
-			minetest.after(1, function()
-				beacon.mark_inactive(from_pos)
-			end)
+			minetest.after(1, beacon.mark_inactive, from_pos)
 		end,
 		digiline = {
 			receptor = {},
@@ -210,12 +208,12 @@ function beacon.register_color(name, colorstring, coloring_item)
 		},
 	})
 
-	-- coloring recipe
+	-- Coloring recipe
 	if type(coloring_item) == "string" and coloring_item ~= "" and minetest.registered_items[coloring_item] then
 		minetest.register_craft({
 			type = "shapeless",
 			output = "beacon:"..id,
-			recipe = { "group:beacon", coloring_item },
+			recipe = {"group:beacon", coloring_item},
 		})
 	end
 end
