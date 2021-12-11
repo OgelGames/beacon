@@ -52,7 +52,7 @@ Other mods can register additional beacon effects, or change or remove existing 
 
 ## Installation
 
-Download the [master branch](https://github.com/OgelGames/beacon/archive/master.zip) or the [latest release](https://github.com/OgelGames/beacon/releases), or clone the repository using Git or the [GitHub Desktop](https://desktop.github.com/) app, and follow [the usual installation steps](https://dev.minetest.net/Installing_Mods).
+Download the [master branch](https://github.com/OgelGames/beacon/archive/master.zip) or the [latest release](https://github.com/OgelGames/beacon/releases), and follow [the usual installation steps](https://dev.minetest.net/Installing_Mods).
 
 ## License
 
