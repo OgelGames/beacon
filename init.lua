@@ -31,6 +31,7 @@ beacon.config = {
 	effect_range_2 = get_value(tonumber(minetest.settings:get("beacon_effect_range_3")), 30),
 	effect_range_3 = get_value(tonumber(minetest.settings:get("beacon_effect_range_4")), 40),
 	effect_range_4 = get_value(tonumber(minetest.settings:get("beacon_effect_range_5")), 50),
+	fly_affects_admins = get_value(minetest.settings:get_bool("beacon_fly_affects_admins"), false),
 	upgrade_item = get_value(minetest.settings:get("beacon_upgrade_item"), "default:diamondblock"),
 }
 

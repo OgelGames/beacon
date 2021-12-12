@@ -31,5 +31,8 @@ beacon_effect_range_3 (Level 3 beacon effect range) int 40
 # The maximum range of a level 4 beacon (four upgrade items).
 beacon_effect_range_4 (Level 4 beacon effect range) int 50
 
+# If enabled, beacons can grant (and revoke) admins the fly privilage (useful for singleplayer).
+beacon_fly_affects_admins (Fly affects admins) bool false
+
 # The item to be placed inside beacons to upgrade them.
 beacon_upgrade_item (Beacon upgrade item) string default:diamondblock
