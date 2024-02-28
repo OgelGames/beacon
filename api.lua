@@ -142,6 +142,7 @@ function beacon.register_color(name, colorstring, coloring_item)
 		paramtype = "light",
 		paramtype2 = "facedir",
 		light_source = 13,
+		is_ground_content = false,
 		on_place = beacon.on_place,
 		after_place_node = function(pos, placer, itemstack, pointed_thing)
 			local player_name = placer and placer:get_player_name() or ""
