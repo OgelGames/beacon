@@ -47,7 +47,8 @@ function beacon.remove_beam(pos)
 	for _=1, beacon.config.beam_length do
 		pos = vector.add(pos, offset)
 		local node = beacon.get_node(pos)
-		if minetest.get_item_group(node.name, "beacon_beam") ~= 1 or beacon.param2_to_dir[node.param2] ~= dir then
+		if minetest.get_item_group(node.name, "beacon_beam") ~= 1
+				or beacon.param2_to_dir[node.param2 % 32 % 24] ~= dir then
 			return  -- End of beam
 		end
 		minetest.set_node(pos, {name = "air"})
@@ -55,7 +56,7 @@ function beacon.remove_beam(pos)
 end
 
 function beacon.activate(pos, player_name)
-	local dir = beacon.param2_to_dir[minetest.get_node(pos).param2]
+	local dir = beacon.param2_to_dir[minetest.get_node(pos).param2 % 32 % 24]
 	local pos1 = vector.add(pos, beacon.dir_to_vector[dir])
 	if minetest.is_protected(pos1, player_name) or not beacon.is_airlike_node(pos1) then
 		minetest.chat_send_player(player_name, "Not enough room to activate beacon pointing in "..dir.." direction!")

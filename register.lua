@@ -22,15 +22,40 @@ minetest.register_craft({
 })
 
 -- Floating beam cleanup
+local function cleanup_leftovers(pos, param2, dir)
+	local origin, count = pos, 0
+	while true do
+		local node = beacon.get_node(pos)
+		if node.param2 ~= param2 or minetest.get_item_group(node.name, "beacon_beam") ~= 1 then
+			break
+		end
+		minetest.set_node(pos, {name = "air"})
+		pos = vector.subtract(pos, dir)
+		count = count + 1
+	end
+	if count == 0 then
+		return
+	end
+	minetest.log("action", string.format(
+		"[beacon] Removed %i floating beacon beam nodes from %s to %s",
+		count, minetest.pos_to_string(origin), minetest.pos_to_string(pos)
+	))
+end
+
 minetest.register_lbm({
 	label = "Floating beacon beam cleanup",
 	name = "beacon:beam_cleanup",
 	nodenames = {"group:beacon_beam"},
 	run_at_every_load = true,
 	action = function(pos, node)
-		local under_pos = vector.add(pos, beacon.param2_to_under[node.param2])
+		local dir = beacon.param2_to_under[node.param2 % 32 % 24]
+		local under_pos = vector.add(pos, dir)
 		if beacon.is_airlike_node(under_pos) then
 			minetest.set_node(pos, {name = "air"})
+			-- Depending on the direction of the beam, the LBM will only cleanup one node each time it runs,
+			-- so after the LBM runs, check for leftover beacon beam nodes above and remove them.
+			local above_pos = vector.subtract(pos, dir)
+			minetest.after(1, cleanup_leftovers, above_pos, node.param2, dir)
 		end
 	end,
 })
